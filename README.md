@@ -223,6 +223,8 @@ Appropriate PDO Driver(s) - PDO_SQLITE, PDO_MYSQL, PDO_PGSQL
 
 Only MySQL, SQLite, and PostgreSQL database types are currently supported.
 
+Example of how to connect to MYSQL database:
+
 // Register class with constructor parameters
 Flight::register('db', 'PDOWrapper', array('mysql:host=127.0.0.1;port=3306;dbname=test','root','', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')));
 
