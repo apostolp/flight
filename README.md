@@ -215,6 +215,16 @@ To get a new instance of a class, simply pass in `false` as a parameter:
 Keep in mind that mapped methods have precedence over registered classes. If you declare both
 using the same name, only the mapped method will be invoked.
 
+# PDO Wrapper based on http://www.imavex.com/php-pdo-wrapper-class/
+System Requirements
+PHP 5
+PDO Extension
+Appropriate PDO Driver(s) - PDO_SQLITE, PDO_MYSQL, PDO_PGSQL
+Only MySQL, SQLite, and PostgreSQL database types are currently supported.
+
+Flight::register('db', 'PDOWrapper', array('mysql:host=127.0.0.1;port=3306;dbname=test','root','', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')));
+$db = Flight::db();
+
 # Overriding
 
 Flight allows you to override its default functionality to suit your own needs, without having to modify any code.

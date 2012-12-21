@@ -8,12 +8,11 @@ class PDOWrapper extends PDO
     private $errorCallbackFunction;
     private $errorMsgFormat;
 
-    public function __construct($dsn, $user = "", $passwd = "")
+    public function __construct($dsn, $user = "", $passwd = "", $options = array())
     {
-        $options = array(
-            PDO::ATTR_PERSISTENT => true,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        );
+        $options[PDO::ATTR_PERSISTENT] = true;
+        $options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
+        $options[PDO::ATTR_DEFAULT_FETCH_MODE] = PDO::FETCH_ASSOC;
 
         try {
             parent::__construct($dsn, $user, $passwd, $options);
