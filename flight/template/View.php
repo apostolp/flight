@@ -13,7 +13,8 @@ namespace flight\template;
  * methods for managing view data and inserts the data into
  * view templates upon rendering.
  */
-class View {
+class View
+{
     /**
      * Locaton of view templates.
      *
@@ -33,7 +34,8 @@ class View {
      *
      * @param string $path Path to templates directory
      */
-    public function __construct($path = '.') {
+    public function __construct($path = '.')
+    {
         $this->path = $path;
     }
 
@@ -43,7 +45,8 @@ class View {
      * @param string $key Key
      * @return mixed
      */
-    public function get($key) {
+    public function get($key)
+    {
         return $this->vars[$key];
     }
 
@@ -53,13 +56,13 @@ class View {
      * @param mixed $key Key
      * @param string $value Value
      */
-    public function set($key, $value = null) {
+    public function set($key, $value = null)
+    {
         if (is_array($key) || is_object($key)) {
             foreach ($key as $k => $v) {
                 $this->vars[$k] = $v;
             }
-        }
-        else {
+        } else {
             $this->vars[$key] = $value;
         }
     }
@@ -69,7 +72,8 @@ class View {
      *
      * @param string $key Key
      */
-    public function has($key) {
+    public function has($key)
+    {
         return isset($this->vars[$key]);
     }
 
@@ -78,11 +82,11 @@ class View {
      *
      * @param string $key Key
      */
-    public function clear($key = null) {
+    public function clear($key = null)
+    {
         if (is_null($key)) {
             $this->vars = array();
-        }
-        else {
+        } else {
             unset($this->vars[$key]);
         }
     }
@@ -93,7 +97,8 @@ class View {
      * @param string $file Template file
      * @param array $data Template data
      */
-    public function render($file, $data = null) {
+    public function render($file, $data = null)
+    {
         $template = $this->getTemplate($file);
 
         if (!file_exists($template)) {
@@ -115,7 +120,8 @@ class View {
      * @param string $file Template file
      * @param array $data Template data
      */
-    public function fetch($file, $data = null) {
+    public function fetch($file, $data = null)
+    {
         ob_start();
 
         $this->render($file, $data);
@@ -132,7 +138,8 @@ class View {
      * @param string $file Template file
      * @return bool Template file exists
      */
-    public function exists($file) {
+    public function exists($file)
+    {
         return file_exists($this->getTemplate($file));
     }
 
@@ -142,8 +149,9 @@ class View {
      * @param string $file Template file
      * @return string Template file location
      */
-    public function getTemplate($file) {
-        return $this->path.'/'.((substr($file, -4) == '.php') ? $file : $file.'.php');
+    public function getTemplate($file)
+    {
+        return $this->path . '/' . ((substr($file, -4) == '.php') ? $file : $file . '.php');
     }
 
     /**
@@ -152,8 +160,10 @@ class View {
      * @param string $str String to escape
      * @return string Escaped string
      */
-    public function e($str) {
+    public function e($str)
+    {
         echo htmlentities($str);
     }
 }
+
 ?>

@@ -28,17 +28,19 @@ use flight\util\Collection;
  *   type - The content type
  *   length - The content length
  *   query - Query string parameters
- *   data - Post parameters 
+ *   data - Post parameters
  *   cookies - Cookie parameters
  *   files - Uploaded files
  */
-class Request {
+class Request
+{
     /**
      * Constructor.
      *
      * @param array $config Request configuration
      */
-    public function __construct($config = array()) {
+    public function __construct($config = array())
+    {
         // Default properties
         if (empty($config)) {
             $config = array(
@@ -68,7 +70,8 @@ class Request {
      *
      * @param array $properties Array of request properties
      */
-    public function init($properties) {
+    public function init($properties)
+    {
         foreach ($properties as $name => $value) {
             $this->$name = $value;
         }
@@ -79,8 +82,7 @@ class Request {
 
         if (empty($this->url)) {
             $this->url = '/';
-        }
-        else {
+        } else {
             $_GET = self::parseQuery($this->url);
 
             $this->query->setData($_GET);
@@ -93,7 +95,8 @@ class Request {
      * @param string $url URL string
      * @return array Query parameters
      */
-    public static function parseQuery($url) {
+    public static function parseQuery($url)
+    {
         $params = array();
 
         $args = parse_url($url);
@@ -109,7 +112,8 @@ class Request {
      *
      * @return string IP address
      */
-    private function getIpAddress() {
+    private function getIpAddress()
+    {
         static $vars = array(
             'HTTP_CLIENT_IP',
             'HTTP_X_FORWARDED_FOR',
@@ -131,4 +135,5 @@ class Request {
         }
     }
 }
+
 ?>

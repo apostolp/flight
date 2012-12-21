@@ -14,7 +14,8 @@ namespace flight\core;
  * allows you to hook other functions to an event that can modify the
  * input parameters and/or the output.
  */
-class Dispatcher {
+class Dispatcher
+{
     /**
      * Mapped events.
      *
@@ -35,7 +36,8 @@ class Dispatcher {
      * @param string $name Event name
      * @param array $params Callback parameters
      */
-    public function run($name, $params) {
+    public function run($name, $params)
+    {
         $output = '';
 
         // Run pre-filters
@@ -60,7 +62,8 @@ class Dispatcher {
      * @param string $name Event name
      * @param callback $callback Callback function
      */
-    public function set($name, $callback) {
+    public function set($name, $callback)
+    {
         $this->events[$name] = $callback;
     }
 
@@ -70,7 +73,8 @@ class Dispatcher {
      * @param string $name Event name
      * @param callback $callback Callback function
      */
-    public function get($name) {
+    public function get($name)
+    {
         return isset($this->events[$name]) ? $this->events[$name] : null;
     }
 
@@ -80,7 +84,8 @@ class Dispatcher {
      * @param string $name Event name
      * @return bool Event status
      */
-    public function has($name) {
+    public function has($name)
+    {
         return isset($this->events[$name]);
     }
 
@@ -90,12 +95,12 @@ class Dispatcher {
      *
      * @param string $name Event name
      */
-    public function clear($name = null) {
+    public function clear($name = null)
+    {
         if ($name !== null) {
             unset($this->events[$name]);
             unset($this->filters[$name]);
-        }
-        else {
+        } else {
             $this->events = array();
             $this->filters = array();
         }
@@ -108,7 +113,8 @@ class Dispatcher {
      * @param string $type Filter type
      * @param callback $callback Callback function
      */
-    public function hook($name, $type, $callback) {
+    public function hook($name, $type, $callback)
+    {
         $this->filters[$name][$type][] = $callback;
     }
 
@@ -119,7 +125,8 @@ class Dispatcher {
      * @param reference $params Method parameters
      * @param reference $output Method output
      */
-    public function filter($filters, &$params, &$output) {
+    public function filter($filters, &$params, &$output)
+    {
         $args = array(&$params, &$output);
         foreach ($filters as $callback) {
             $continue = $this->execute($callback, $args);
@@ -134,7 +141,8 @@ class Dispatcher {
      * @param array $params Function parameters
      * @return mixed Function results
      */
-    public static function execute($callback, array &$params = array()) {
+    public static function execute($callback, array &$params = array())
+    {
         if (is_callable($callback)) {
             return is_array($callback) ?
                 self::invokeMethod($callback, $params) :
@@ -146,9 +154,10 @@ class Dispatcher {
      * Calls a function.
      *
      * @param string $func Name of function to call
-     * @param array $params Function parameters 
+     * @param array $params Function parameters
      */
-    public static function callFunction($func, array &$params = array()) {
+    public static function callFunction($func, array &$params = array())
+    {
         switch (count($params)) {
             case 0:
                 return $func();
@@ -173,11 +182,12 @@ class Dispatcher {
      * @param mixed $func Class method
      * @param array $params Class method parameters
      */
-    public static function invokeMethod($func, array &$params = array()) {
+    public static function invokeMethod($func, array &$params = array())
+    {
         list($class, $method) = $func;
 
-		$instance = is_object($class);
-		
+        $instance = is_object($class);
+
         switch (count($params)) {
             case 0:
                 return ($instance) ? $class->$method() : $class::$method();
@@ -196,4 +206,5 @@ class Dispatcher {
         }
     }
 }
+
 ?>

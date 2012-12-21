@@ -11,9 +11,10 @@ namespace flight\net;
 /**
  * The Router class is responsible for routing an HTTP request to
  * an assigned callback function. The Router tries to match the
- * requested URL against a series of URL patterns. 
+ * requested URL against a series of URL patterns.
  */
-class Router {
+class Router
+{
     /**
      * Mapped routes.
      *
@@ -40,14 +41,16 @@ class Router {
      *
      * @return array Array of routes
      */
-    public function getRoutes() {
+    public function getRoutes()
+    {
         return $this->routes;
     }
 
     /**
      * Resets the router.
      */
-    public function clear() {
+    public function clear()
+    {
         $this->routes = array();
     }
 
@@ -57,15 +60,15 @@ class Router {
      * @param string $pattern URL pattern to match
      * @param callback $callback Callback function
      */
-    public function map($pattern, $callback) {
+    public function map($pattern, $callback)
+    {
         if (strpos($pattern, ' ') !== false) {
             list($method, $url) = explode(' ', trim($pattern), 2);
 
             foreach (explode('|', $method) as $value) {
                 $this->routes[$value][$url] = $callback;
             }
-        }
-        else {
+        } else {
             $this->routes['*'][$pattern] = $callback;
         }
     }
@@ -76,28 +79,28 @@ class Router {
      * @param string $pattern URL pattern
      * @param string $url Requested URL
      */
-    public function match($pattern, $url) {
+    public function match($pattern, $url)
+    {
         $ids = array();
 
         // Build the regex for matching
-        $regex = '/^'.implode('\/', array_map(
-            function($str) use (&$ids){
+        $regex = '/^' . implode('\/', array_map(
+            function ($str) use (&$ids) {
                 if ($str == '*') {
                     $str = '(.*)';
-                }
-                else if ($str != null && $str{0} == '@') {
+                } else if ($str != null && $str{0} == '@') {
                     if (preg_match('/@(\w+)(\:([^\/|\(]*))?([\(|\)]+)?/', $str, $matches)) {
                         $ids[$matches[1]] = null;
-                        return '(?P<'.$matches[1].'>'
-                            .(!empty($matches[3]) ? $matches[3] : '[^(\/|\?)]+')
-                            .')'
-                            .(!empty($matches[4]) ? str_replace(')',')?',$matches[4]) : '');
+                        return '(?P<' . $matches[1] . '>'
+                            . (!empty($matches[3]) ? $matches[3] : '[^(\/|\?)]+')
+                            . ')'
+                            . (!empty($matches[4]) ? str_replace(')', ')?', $matches[4]) : '');
                     }
                 }
-                return $str; 
+                return $str;
             },
             explode('/', $pattern)
-        )).'\/?(?:\?.*)?$/i';
+        )) . '\/?(?:\?.*)?$/i';
 
         // Attempt to match route and named parameters
         if (preg_match($regex, $url, $matches)) {
@@ -119,7 +122,8 @@ class Router {
      * @param object $request Request object
      * @return callable Matched callback function
      */
-    public function route(Request $request) {
+    public function route(Request $request)
+    {
         $this->matched = null;
         $this->params = array();
 
@@ -135,4 +139,5 @@ class Router {
         return false;
     }
 }
+
 ?>

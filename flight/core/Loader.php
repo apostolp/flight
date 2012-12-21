@@ -14,7 +14,8 @@ namespace flight\core;
  * instances with custom initialization parameters. It also performs
  * class autoloading.
  */
-class Loader {
+class Loader
+{
     /**
      * Registered classes.
      *
@@ -44,7 +45,8 @@ class Loader {
      * @param array $params Class initialization parameters
      * @param callback $callback Function to call after object instantiation
      */
-    public function register($name, $class, array $params = array(), $callback = null) {
+    public function register($name, $class, array $params = array(), $callback = null)
+    {
         unset($this->instances[$class]);
 
         $this->classes[$name] = array($class, $params, $callback);
@@ -55,7 +57,8 @@ class Loader {
      *
      * @param string $name Registry name
      */
-    public function unregister($name) {
+    public function unregister($name)
+    {
         unset($this->classes[$name]);
     }
 
@@ -65,7 +68,8 @@ class Loader {
      * @param string $name Method name
      * @param bool $shared Shared instance
      */
-    public function load($name, $shared = true) {
+    public function load($name, $shared = true)
+    {
         if (isset($this->classes[$name])) {
             list($class, $params, $callback) = $this->classes[$name];
 
@@ -94,7 +98,8 @@ class Loader {
      * @param string $class Class name
      * @param array $params Class initialization parameters
      */
-    public function getInstance($class, array $params = array()) {
+    public function getInstance($class, array $params = array())
+    {
         if (!isset($this->instances[$class])) {
             $this->instances[$class] = $this->newInstance($class, $params);
         }
@@ -108,7 +113,8 @@ class Loader {
      * @param string $class Class name
      * @param array $params Class initialization parameters
      */
-    public function newInstance($class, array $params = array()) {
+    public function newInstance($class, array $params = array())
+    {
         switch (count($params)) {
             case 0:
                 return new $class();
@@ -133,13 +139,13 @@ class Loader {
      *
      * @param mixed $dir Directory path
      */
-    public function addDirectory($dir) {
+    public function addDirectory($dir)
+    {
         if (is_array($dir) || is_object($dir)) {
             foreach ($dir as $value) {
                 $this->dirs[] = $value;
             }
-        }
-        else if (is_string($dir)) {
+        } else if (is_string($dir)) {
             $this->dirs[] = $dir;
         }
     }
@@ -147,7 +153,8 @@ class Loader {
     /**
      * Initializes the autoloader.
      */
-    public function init() {
+    public function init()
+    {
         static $initialized = false;
 
         if (!$initialized) {
@@ -162,11 +169,12 @@ class Loader {
      *
      * @param string $class Class name
      */
-    public function autoload($class) {
-        $class_file = str_replace('\\', '/', str_replace('_', '/', $class)).'.php';
+    public function autoload($class)
+    {
+        $class_file = str_replace('\\', '/', str_replace('_', '/', $class)) . '.php';
 
         foreach ($this->dirs as $dir) {
-            $file = $dir.'/'.$class_file;
+            $file = $dir . '/' . $class_file;
             if (file_exists($file)) {
                 require $file;
                 return;
@@ -177,8 +185,9 @@ class Loader {
         $loaders = spl_autoload_functions();
         $loader = array_pop($loaders);
         if (is_array($loader) && $loader[0] == __CLASS__ && $loader[1] == __FUNCTION__) {
-            throw new Exception('Unable to load file: '.$class_file);
+            throw new Exception('Unable to load file: ' . $class_file);
         }
     }
 }
+
 ?>
