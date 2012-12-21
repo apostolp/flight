@@ -74,7 +74,7 @@ class Flight
     /**
      * Initializes the framework.
      */
-    public static function init()
+    public static function init($config = null)
     {
         static $initialized = false;
 
@@ -94,6 +94,9 @@ class Flight
                 $_POST = array_map($func, $_POST);
                 $_COOKIE = array_map($func, $_COOKIE);
             }
+
+            // Load configuration params
+            self::config($config);
 
             // Load core components
             self::$loader = new \flight\core\Loader();
@@ -123,6 +126,17 @@ class Flight
             // Default settings
             self::set('flight.views.path', './views');
             self::set('flight.log_errors', false);
+
+            // init db adapter
+            if (Flight::has('db')) {
+                $db = Flight::get('db');
+                $db_class = 'flight/util/' . $db['class'] . '.php';
+
+                if(is_file($db_class)) {
+                    require $db_class;
+                    self::register('db', $db['class'], array($db['connectionString'], $db['username'],$db['password'],$db['options']));
+                }
+            }
 
             // Enable output buffering
             ob_start();
@@ -467,8 +481,29 @@ class Flight
             self::halt(304);
         }
     }
+
+    /**
+     * Load configuration params from file
+     *
+     * @param string $config
+     */
+    public static function config($config)
+    {
+        if (is_file($config)) {
+
+            $vars = include($config);
+
+            foreach ($vars as $key => $value) {
+                Flight::set($key, $value);
+            }
+
+        } else {
+
+            die('Configuration file not found ' . $config);
+        }
+    }
+
 }
 
 // Initialize the framework on include
-Flight::init();
-?>
+Flight::init($config);
