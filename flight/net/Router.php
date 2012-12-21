@@ -139,5 +139,3 @@ class Router
         return false;
     }
 }
-
-?>

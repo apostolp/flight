@@ -173,5 +173,3 @@ class Response
         exit($this->body);
     }
 }
-
-?>

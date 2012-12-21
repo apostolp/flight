@@ -218,5 +218,3 @@ class Collection implements \ArrayAccess, \Iterator, \Countable
         $this->data = array();
     }
 }
-
-?>

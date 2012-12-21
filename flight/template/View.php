@@ -165,5 +165,3 @@ class View
         echo htmlentities($str);
     }
 }
-
-?>
