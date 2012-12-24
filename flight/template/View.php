@@ -149,9 +149,14 @@ class View
      * @param string $file Template file
      * @return string Template file location
      */
+<<<<<<< HEAD
     public function getTemplate($file)
     {
         return $this->path . '/' . ((substr($file, -4) == '.php') ? $file : $file . '.php');
+=======
+    public function getTemplate($file) {
+        return $this->path.'/'.basename($file, '.php').'.php';
+>>>>>>> 0bb5001fce95b3b0af04ec243da58138c8ba5c49
     }
 
     /**

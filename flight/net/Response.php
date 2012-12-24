@@ -71,11 +71,36 @@ class Response
     {
         if (array_key_exists($code, self::$codes)) {
             if (strpos(php_sapi_name(), 'cgi') !== false) {
+<<<<<<< HEAD
                 header('Status: ' . $code . ' ' . self::$codes[$code], true);
             } else {
                 header(($_SERVER['SERVER_PROTOCOL'] ? : 'HTTP/1.1') . ' ' . $code . ' ' . self::$codes[$code], true, $code);
             }
         } else {
+=======
+                header(
+                    sprintf(
+                        'Status: %d %s',
+                        $code,
+                        self::$codes[$code]
+                    ),
+                    true
+                );
+            }
+            else {
+                header(
+                    sprintf(
+                        '%s %d %s',
+                        (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1'),
+                        $code,
+                        self::$codes[$code]),
+                    true,
+                    $code
+                );
+            }
+        }
+        else {
+>>>>>>> 0bb5001fce95b3b0af04ec243da58138c8ba5c49
             throw new \Exception('Invalid status code.');
         }
 
