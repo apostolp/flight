@@ -130,12 +130,36 @@ class PDOWrapper extends PDO
         }
     }
 
-    public function select($table, $where = "", $bind = "", $fields = "*")
+    /**
+     * @param $table
+     * @param string $where
+     * @param string $bind
+     * @param string $fields
+     * @param null $order
+     * @param array $limit (offset,row-count)
+     * @return array|bool|int
+     */
+    public function select($table, $where = "", $bind = "", $fields = "*", $order = null, $limit = array())
     {
         $sql = "SELECT " . $fields . " FROM " . $table;
-        if (!empty($where))
+        if (!empty($where)) {
             $sql .= " WHERE " . $where;
+        }
+
+        if(!is_null($order)) {
+            $sql .= ' ORDER BY ' . $order;
+        }
+
+        if(isset($limit[0])) {
+            $sql .= ' LIMIT ' . $limit[0];
+        }
+
+        if(isset($limit[1])) {
+            $sql .= ',' . $limit[1];
+        }
+
         $sql .= ";";
+
         return $this->run($sql, $bind);
     }
 
