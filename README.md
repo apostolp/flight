@@ -220,10 +220,10 @@ using the same name, only the mapped method will be invoked.
 System Requirements: PDO Extension
 Appropriate PDO Driver(s) - PDO_SQLITE, PDO_MYSQL, PDO_PGSQL
 
-// Get an instance of your class
-// This will create an object with the defined parameters in app config see section "App config"
+	// Get an instance of your class
+	// This will create an object with the defined parameters in app config see section "App config"
 
-$db = Flight::db();
+	$db = Flight::db();
 
 
 # App config initial suuport
@@ -255,7 +255,7 @@ return array(
         ),
 
 	),
-);
+	);
 
 $db = Flight::db();
 
