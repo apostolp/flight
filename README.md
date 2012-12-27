@@ -216,21 +216,50 @@ Keep in mind that mapped methods have precedence over registered classes. If you
 using the same name, only the mapped method will be invoked.
 
 # PDO Wrapper based on http://www.imavex.com/php-pdo-wrapper-class/
-System Requirements
-PDO Extension
 
+System Requirements: PDO Extension
 Appropriate PDO Driver(s) - PDO_SQLITE, PDO_MYSQL, PDO_PGSQL
 
-Only MySQL, SQLite, and PostgreSQL database types are currently supported.
-
-Example of how to connect to MYSQL database:
-
-// Register class with constructor parameters
-Flight::register('db', 'PDOWrapper', array('mysql:host=127.0.0.1;port=3306;dbname=test','root','', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')));
-
 // Get an instance of your class
-// This will create an object with the defined parameters
+// This will create an object with the defined parameters in app config see section "App config"
+
 $db = Flight::db();
+
+
+# App config initial suuport
+
+set in root www directory index.php
+$config = dirname(__FILE__) . '/app/config/main.php';
+
+path - app/main.php
+
+example for multiple DB connections
+
+return array(
+
+    'dbFactory' =>
+        array(
+        'db' => array(
+            'class' => 'PDOWrapper',
+            'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=cdcol',
+            'username' => 'root',
+            'password' => '',
+            'options' => array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'),
+            ),
+        'db2' => array(
+            'class' => 'PDOWrapper',
+            'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=calendar',
+            'username' => 'root',
+            'password' => '',
+            'options' => array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'),
+        ),
+
+	),
+);
+
+$db = Flight::db();
+
+$db2 = Flight::db2();
 
 # Overriding
 
