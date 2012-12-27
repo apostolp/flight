@@ -67,16 +67,18 @@ class Loader
      *
      * @param string $name Method name
      * @param bool $shared Shared instance
+     * @return mixed
      */
     public function load($name, $shared = true)
     {
+
         if (isset($this->classes[$name])) {
             list($class, $params, $callback) = $this->classes[$name];
 
             $do_callback = ($callback && (!$shared || !isset($this->instances[$class])));
 
             $obj = ($shared) ?
-                $this->getInstance($class, $params) :
+                $this->getInstance($name, $class, $params) :
                 $this->newInstance($class, $params);
 
             if ($do_callback) {
@@ -95,16 +97,21 @@ class Loader
     /**
      * Gets a single instance of a class.
      *
-     * @param string $class Class name
+     * @param string $name label
+     * @param null|string $class Class name
      * @param array $params Class initialization parameters
+     * @return mixed
      */
-    public function getInstance($class, array $params = array())
+    public function getInstance($name, $class = null, array $params = array())
     {
-        if (!isset($this->instances[$class])) {
-            $this->instances[$class] = $this->newInstance($class, $params);
+        if (!isset($this->instances[$name])) {
+            if(is_null($class)) {
+                $class = $name;
+            }
+            $this->instances[$name] = $this->newInstance($class, $params);
         }
 
-        return $this->instances[$class];
+        return $this->instances[$name];
     }
 
     /**
@@ -165,9 +172,10 @@ class Loader
     }
 
     /**
-     * Autoloads classes.
+     * Autoloads classes
      *
      * @param string $class Class name
+     * @throws Exception
      */
     public function autoload($class)
     {

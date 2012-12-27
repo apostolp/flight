@@ -128,15 +128,7 @@ class Flight
             self::set('flight.log_errors', false);
 
             // init db adapter
-            if (Flight::has('db')) {
-                $db = Flight::get('db');
-                $db_class = 'flight/util/' . $db['class'] . '.php';
-
-                if(is_file($db_class)) {
-                    require $db_class;
-                    self::register('db', $db['class'], array($db['connectionString'], $db['username'],$db['password'],$db['options']));
-                }
-            }
+            self::initDbFactory();
 
             // Enable output buffering
             ob_start();
@@ -500,6 +492,24 @@ class Flight
         } else {
 
             die('Configuration file not found ' . $config);
+        }
+    }
+
+    public static function initDbFactory()
+    {
+        if (Flight::has('dbFactory')) {
+
+            $dbFactory = Flight::get('dbFactory');
+
+            foreach($dbFactory as $db_key => $db) {
+
+                $db_class = 'flight/util/' . $db['class'] . '.php';
+
+                if (is_file($db_class)) {
+                    require_once $db_class;
+                    self::register($db_key,  '\\' . $db['class'], array($db['connectionString'], $db['username'], $db['password'], $db['options']));
+                }
+            }
         }
     }
 

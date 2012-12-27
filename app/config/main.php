@@ -8,11 +8,23 @@
  * @return   array
  */
 return array(    
-    'db' => array(
-        'class' => 'PDOWrapper',
-        'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=cdcol',
-        'username' => 'root',
-        'password' => '',	
-		'options' => array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'),
+
+    'dbFactory' =>
+        array(
+        'db' => array(
+            'class' => 'PDOWrapper',
+            'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=cdcol',
+            'username' => 'root',
+            'password' => '',
+            'options' => array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'),
+            ),
+        'db2' => array(
+            'class' => 'PDOWrapper',
+            'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=calendar',
+            'username' => 'root',
+            'password' => '',
+            'options' => array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'),
+        ),
+
 	),
 );

@@ -67,17 +67,9 @@ class Response
      *
      * @param int $code HTTP status code.
      */
-    public function status($code)
-    {
+    public function status($code) {
         if (array_key_exists($code, self::$codes)) {
             if (strpos(php_sapi_name(), 'cgi') !== false) {
-<<<<<<< HEAD
-                header('Status: ' . $code . ' ' . self::$codes[$code], true);
-            } else {
-                header(($_SERVER['SERVER_PROTOCOL'] ? : 'HTTP/1.1') . ' ' . $code . ' ' . self::$codes[$code], true, $code);
-            }
-        } else {
-=======
                 header(
                     sprintf(
                         'Status: %d %s',
@@ -100,7 +92,6 @@ class Response
             }
         }
         else {
->>>>>>> 0bb5001fce95b3b0af04ec243da58138c8ba5c49
             throw new \Exception('Invalid status code.');
         }
 
