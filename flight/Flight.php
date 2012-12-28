@@ -74,7 +74,7 @@ class Flight
     /**
      * Initializes the framework.
      */
-    public static function init($config = null)
+    public static function init($app = null, $config = null)
     {
         static $initialized = false;
 
@@ -96,7 +96,7 @@ class Flight
             }
 
             // Load configuration params
-            self::config($config);
+            self::config($app . '/config/' . $config);
 
             // Load core components
             self::$loader = new \flight\core\Loader();
@@ -127,8 +127,14 @@ class Flight
             self::set('flight.views.path', './views');
             self::set('flight.log_errors', false);
 
+            // mvc path
+            self::path($app);
+
             // init db adapter
             self::initDbFactory();
+
+            // added routes from config
+            self::initRoutes();
 
             // Enable output buffering
             ob_start();
@@ -513,7 +519,18 @@ class Flight
         }
     }
 
+    public static function initRoutes()
+    {
+        if (Flight::has('routes')) {
+
+            $routes = Flight::get('routes');
+            foreach($routes as $r_key => $route) {
+                self::route($r_key, $route);
+            }
+        }
+    }
+
 }
 
 // Initialize the framework on include
-Flight::init($config);
+Flight::init($app, $config);
