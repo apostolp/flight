@@ -456,18 +456,11 @@ class Flight
      */
     public static function _etag($id, $type = 'strong')
     {
-        $id = (($type === 'weak') ? 'W/' : '') . $id;
+        $id = (($type === 'weak') ? 'W/' : '').$id;
 
         self::response()->header('ETag', $id);
-<<<<<<< HEAD
-
-        if (isset($_SERVER['HTTP_IF_NONE_MATCH']) &&
-            $_SERVER['HTTP_IF_NONE_MATCH'] === $id
-        ) {
-=======
         
         if ($id === getenv('HTTP_IF_NONE_MATCH')) {
->>>>>>> cec890c585b29fb549246399d3d4058ef882d818
             self::halt(304);
         }
     }
@@ -481,13 +474,7 @@ class Flight
     {
         self::response()->header('Last-Modified', date(DATE_RFC1123, $time));
 
-<<<<<<< HEAD
-        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) &&
-            strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) === $time
-        ) {
-=======
         if ($time === strtotime(getenv('HTTP_IF_MODIFIED_SINCE'))) {
->>>>>>> cec890c585b29fb549246399d3d4058ef882d818
             self::halt(304);
         }
     }

@@ -156,10 +156,7 @@ class Dispatcher
      *
      * @param string $func Name of function to call
      * @param array $params Function parameters
-<<<<<<< HEAD
-=======
      * @return mixed Function results
->>>>>>> cec890c585b29fb549246399d3d4058ef882d818
      */
     public static function callFunction($func, array &$params = array())
     {
