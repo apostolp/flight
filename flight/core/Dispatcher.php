@@ -35,6 +35,7 @@ class Dispatcher
      *
      * @param string $name Event name
      * @param array $params Callback parameters
+     * @return string Output of callback
      */
     public function run($name, $params)
     {
@@ -71,7 +72,7 @@ class Dispatcher
      * Gets an assigned callback.
      *
      * @param string $name Event name
-     * @param callback $callback Callback function
+     * @return callback $callback Callback function
      */
     public function get($name)
     {
@@ -109,7 +110,7 @@ class Dispatcher
     /**
      * Hooks a callback to an event.
      *
-     * @param string $event Event name
+     * @param string $name Event name
      * @param string $type Filter type
      * @param callback $callback Callback function
      */
@@ -122,8 +123,8 @@ class Dispatcher
      * Executes a chain of method filters.
      *
      * @param array $filters Chain of filters
-     * @param reference $params Method parameters
-     * @param reference $output Method output
+     * @param object $params Method parameters
+     * @param object $output Method output
      */
     public function filter($filters, &$params, &$output)
     {
@@ -155,6 +156,10 @@ class Dispatcher
      *
      * @param string $func Name of function to call
      * @param array $params Function parameters
+<<<<<<< HEAD
+=======
+     * @return mixed Function results
+>>>>>>> cec890c585b29fb549246399d3d4058ef882d818
      */
     public static function callFunction($func, array &$params = array())
     {
@@ -181,6 +186,7 @@ class Dispatcher
      *
      * @param mixed $func Class method
      * @param array $params Class method parameters
+     * @return mixed Function results
      */
     public static function invokeMethod($func, array &$params = array())
     {
@@ -190,17 +196,29 @@ class Dispatcher
 
         switch (count($params)) {
             case 0:
-                return ($instance) ? $class->$method() : $class::$method();
+                return ($instance) ?
+                    $class->$method() :
+                    $class::$method();
             case 1:
-                return ($instance) ? $class->$method($params[0]) : $class::$method($params[0]);
+                return ($instance) ?
+                    $class->$method($params[0]) :
+                    $class::$method($params[0]);
             case 2:
-                return ($instance) ? $class->$method($params[0], $params[1]) : $class::$method($params[0], $params[1]);
+                return ($instance) ?
+                    $class->$method($params[0], $params[1]) :
+                    $class::$method($params[0], $params[1]);
             case 3:
-                return ($instance) ? $class->$method($params[0], $params[1], $params[2]) : $class::$method($params[0], $params[1], $params[2]);
+                return ($instance) ?
+                    $class->$method($params[0], $params[1], $params[2]) :
+                    $class::$method($params[0], $params[1], $params[2]);
             case 4:
-                return ($instance) ? $class->$method($params[0], $params[1], $params[2], $params[3]) : $class::$method($params[0], $params[1], $params[2], $params[3]);
+                return ($instance) ?
+                    $class->$method($params[0], $params[1], $params[2], $params[3]) :
+                    $class::$method($params[0], $params[1], $params[2], $params[3]);
             case 5:
-                return ($instance) ? $class->$method($params[0], $params[1], $params[2], $params[3], $params[4]) : $class::$method($params[0], $params[1], $params[2], $params[3], $params[4]);
+                return ($instance) ?
+                    $class->$method($params[0], $params[1], $params[2], $params[3], $params[4]) :
+                    $class::$method($params[0], $params[1], $params[2], $params[3], $params[4]);
             default:
                 return call_user_func_array($func, $params);
         }

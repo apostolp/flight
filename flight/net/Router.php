@@ -78,6 +78,7 @@ class Router
      *
      * @param string $pattern URL pattern
      * @param string $url Requested URL
+     * @return boolean Match status
      */
     public function match($pattern, $url)
     {
@@ -119,8 +120,8 @@ class Router
     /**
      * Routes the current request.
      *
-     * @param object $request Request object
-     * @return callable Matched callback function
+     * @param Request $request Request object
+     * @return callable|boolean Matched callback function or false if not found
      */
     public function route(Request $request)
     {

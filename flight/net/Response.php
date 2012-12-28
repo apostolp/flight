@@ -66,6 +66,8 @@ class Response
      * Sets the HTTP status of the response.
      *
      * @param int $code HTTP status code.
+     * @return object Self reference
+     * @throws \Exception If invalid status code
      */
     public function status($code) {
         if (array_key_exists($code, self::$codes)) {
@@ -83,7 +85,7 @@ class Response
                 header(
                     sprintf(
                         '%s %d %s',
-                        (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1'),
+                        getenv('SERVER_PROTOCOL') ?: 'HTTP/1.1',
                         $code,
                         self::$codes[$code]),
                     true,
@@ -101,8 +103,9 @@ class Response
     /**
      * Adds a header to the response.
      *
-     * @param string|array $key Header name or array of names and values
+     * @param string|array $name Header name or array of names and values
      * @param string $value Header value
+     * @return object Self reference
      */
     public function header($name, $value = null)
     {
@@ -121,6 +124,7 @@ class Response
      * Writes content to the response body.
      *
      * @param string $str Response content
+     * @return object Self reference
      */
     public function write($str)
     {
@@ -131,6 +135,8 @@ class Response
 
     /**
      * Clears the response.
+     *
+     * @return object Self reference
      */
     public function clear()
     {
@@ -145,6 +151,7 @@ class Response
      * Sets caching headers for the response.
      *
      * @param int|string $expires Expiration time
+     * @return object Self reference
      */
     public function cache($expires)
     {

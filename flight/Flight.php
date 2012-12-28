@@ -54,7 +54,7 @@ class Flight
      * Handles calls to static methods.
      *
      * @param string $name Method name
-     * @param array $args Method parameters
+     * @param array $params Method parameters
      */
     public static function __callStatic($name, $params)
     {
@@ -161,7 +161,7 @@ class Flight
     /**
      * Custom exception handler. Logs exceptions.
      *
-     * @param object $e Exception
+     * @param Exception $e Thrown exception
      */
     public static function handleException(Exception $e)
     {
@@ -176,6 +176,7 @@ class Flight
      *
      * @param string $name Method name
      * @param callback $callback Callback function
+     * @throws Exception If trying to map over a framework method
      */
     public static function map($name, $callback)
     {
@@ -193,6 +194,7 @@ class Flight
      * @param string $class Class name
      * @param array $params Class initialization parameters
      * @param callback $callback Function to call after object instantiation
+     * @throws Exception If trying to map over a framework method
      */
     public static function register($name, $class, array $params = array(), $callback = null)
     {
@@ -334,7 +336,7 @@ class Flight
      * Stops processing and returns a given response.
      *
      * @param int $code HTTP status code
-     * @param int $message Response message
+     * @param string $message Response message
      */
     public static function _halt($code = 200, $message = '')
     {
@@ -348,7 +350,7 @@ class Flight
     /**
      * Sends an HTTP 500 response for any errors.
      *
-     * @param object $e Exception
+     * @param \Exception Thrown exception
      */
     public static function _error(Exception $e)
     {
@@ -400,6 +402,7 @@ class Flight
      * Redirects the current request to another URL.
      *
      * @param string $url URL
+     * @param int $code HTTP status code
      */
     public static function _redirect($url, $code = 303)
     {
@@ -456,10 +459,15 @@ class Flight
         $id = (($type === 'weak') ? 'W/' : '') . $id;
 
         self::response()->header('ETag', $id);
+<<<<<<< HEAD
 
         if (isset($_SERVER['HTTP_IF_NONE_MATCH']) &&
             $_SERVER['HTTP_IF_NONE_MATCH'] === $id
         ) {
+=======
+        
+        if ($id === getenv('HTTP_IF_NONE_MATCH')) {
+>>>>>>> cec890c585b29fb549246399d3d4058ef882d818
             self::halt(304);
         }
     }
@@ -473,9 +481,13 @@ class Flight
     {
         self::response()->header('Last-Modified', date(DATE_RFC1123, $time));
 
+<<<<<<< HEAD
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) &&
             strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) === $time
         ) {
+=======
+        if ($time === strtotime(getenv('HTTP_IF_MODIFIED_SINCE'))) {
+>>>>>>> cec890c585b29fb549246399d3d4058ef882d818
             self::halt(304);
         }
     }

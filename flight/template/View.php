@@ -71,6 +71,7 @@ class View
      * Checks if a template variable is set.
      *
      * @param string $key Key
+     * @return boolean If key exists
      */
     public function has($key)
     {
@@ -96,6 +97,7 @@ class View
      *
      * @param string $file Template file
      * @param array $data Template data
+     * @throws \Exception If template not found
      */
     public function render($file, $data = null)
     {
@@ -119,6 +121,7 @@ class View
      *
      * @param string $file Template file
      * @param array $data Template data
+     * @return string Output of template
      */
     public function fetch($file, $data = null)
     {
