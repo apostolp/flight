@@ -67,7 +67,7 @@ class Loader
      *
      * @param string $name Method name
      * @param bool $shared Shared instance
-     * @return mixed
+     * @return object Class instance
      */
     public function load($name, $shared = true)
     {
@@ -119,6 +119,7 @@ class Loader
      *
      * @param string $class Class name
      * @param array $params Class initialization parameters
+     * @return object Class instance
      */
     public function newInstance($class, array $params = array())
     {
@@ -136,7 +137,7 @@ class Loader
             case 5:
                 return new $class($params[0], $params[1], $params[2], $params[3], $params[4]);
             default:
-                $refClass = new ReflectionClass($class);
+                $refClass = new \ReflectionClass($class);
                 return $refClass->newInstanceArgs($params);
         }
     }
@@ -175,7 +176,7 @@ class Loader
      * Autoloads classes
      *
      * @param string $class Class name
-     * @throws Exception
+     * @throws \Exception If class not found
      */
     public function autoload($class)
     {
@@ -193,7 +194,7 @@ class Loader
         $loaders = spl_autoload_functions();
         $loader = array_pop($loaders);
         if (is_array($loader) && $loader[0] == __CLASS__ && $loader[1] == __FUNCTION__) {
-            throw new Exception('Unable to load file: ' . $class_file);
+            throw new \Exception('Unable to load file: '.$class_file);
         }
     }
 }
