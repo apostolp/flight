@@ -28,6 +28,7 @@ return array(
 	),
     'routes' =>
         array(
+            '/' => array('\controllers\Index', 'start'),
             '/@name/@id:[0-9]+' => array('\controllers\Test','test'),
         ),
 );
