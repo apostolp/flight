@@ -215,7 +215,7 @@ To get a new instance of a class, simply pass in `false` as a parameter:
 Keep in mind that mapped methods have precedence over registered classes. If you declare both
 using the same name, only the mapped method will be invoked.
 
-# PDO Wrapper based on http://www.imavex.com/php-pdo-wrapper-class/
+# PDO Wrapper based on [Origin wrapper PDO class](http://www.imavex.com/php-pdo-wrapper-class/)
 
 System Requirements: PDO Extension
 Appropriate PDO Driver(s) - PDO_SQLITE, PDO_MYSQL, PDO_PGSQL
@@ -229,9 +229,13 @@ Appropriate PDO Driver(s) - PDO_SQLITE, PDO_MYSQL, PDO_PGSQL
 # App - MVC
 
  app
+ 
    -- config
+   
    -- controllers
+   
    -- models
+   
    -- views
 
 
