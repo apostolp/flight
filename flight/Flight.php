@@ -136,6 +136,9 @@ class Flight
             // added routes from config
             self::initRoutes();
 
+            // set views path
+            self::set('flight.views.path', $app . '/views/');
+
             // Enable output buffering
             ob_start();
 
