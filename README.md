@@ -220,16 +220,35 @@ using the same name, only the mapped method will be invoked.
 System Requirements: PDO Extension
 Appropriate PDO Driver(s) - PDO_SQLITE, PDO_MYSQL, PDO_PGSQL
 
-	// Get an instance of your class
-	// This will create an object with the defined parameters in app config see section "App config"
+    // Get an instance of your class
+    // This will create an object with the defined parameters in app config see section "App config"
 
-	$db = Flight::db();
+    $db = Flight::db();
 
 
-# App config initial suuport
+# App - MVC
 
-set in root www directory index.php
-$config = dirname(__FILE__) . '/app/config/main.php';
+ app
+   -- config
+   -- controllers
+   -- models
+   -- views
+
+
+/index.php
+
+    $app = dirname(__FILE__) . '/app';
+    $config = 'main.php';
+    
+    require 'flight/Flight.php';
+    
+    Flight::start();
+
+
+# app/config
+
+set in root www directory index.php    
+    $config = 'main.php';
 
 path - app/main.php
 
@@ -257,9 +276,56 @@ return array(
 	),
 	);
 
-$db = Flight::db();
+    $db = Flight::db();
 
-$db2 = Flight::db2();
+    $db2 = Flight::db2();
+    
+example config routes
+
+    'routes' =>
+        array(
+            '/' => array('\controllers\Index', 'start'),
+            '/@name/@id:[0-9]+' => array('\controllers\Test','test'),
+        ),
+
+# app/controllers
+
+    namespace controllers;
+
+    use flight;
+
+    class Test
+    {
+        public static function test()
+        {
+            $users = new \models\Users();
+
+       	    Flight::render('test_test.php', array('model' => $users->getResults()));
+        }
+    }
+    
+# app/models
+
+    namespace models;
+
+    use flight;
+
+    class Users
+    {
+
+        public function getResults()
+        {
+            $db = Flight::db();
+            $results = $db->select("cds");
+
+            return $results;
+        }
+    }
+
+# app/views
+
+    print_r($model);
+    
 
 # Overriding
 
@@ -651,3 +717,8 @@ extensible methods, which can be filtered or overridden.
     Flight::json($data) - Sends a JSON response.
 
 Any custom methods added with `map` and `register` can also be filtered.
+
+## TODO
+
+- Caching - cache object on filesystem
+- createUrl - creating url 
