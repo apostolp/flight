@@ -10,8 +10,6 @@ class Test
     {
         $users = new \models\Users();
 
-        echo '<xmp>';
-        print_r($users->getResults());
-        echo '</xmp>';
+        Flight::render('test_test.php', array('model' => $users->getResults()));
     }
 }

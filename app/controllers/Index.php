@@ -8,6 +8,6 @@ class Index
 {
     public static function start()
     {
-        echo 'Hello world';
+        Flight::render('index_start');
     }
 }
