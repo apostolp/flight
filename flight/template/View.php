@@ -47,7 +47,7 @@ class View
      */
     public function get($key)
     {
-        return $this->vars[$key];
+        return isset($this->vars[$key]) ? $this->vars[$key] : null;
     }
 
     /**

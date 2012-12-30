@@ -69,7 +69,8 @@ class Response
      * @return object Self reference
      * @throws \Exception If invalid status code
      */
-    public function status($code) {
+    public function status($code)
+    {
         if (array_key_exists($code, self::$codes)) {
             if (strpos(php_sapi_name(), 'cgi') !== false) {
                 header(
@@ -80,20 +81,18 @@ class Response
                     ),
                     true
                 );
-            }
-            else {
+            } else {
                 header(
                     sprintf(
                         '%s %d %s',
-                        getenv('SERVER_PROTOCOL') ?: 'HTTP/1.1',
+                        getenv('SERVER_PROTOCOL') ? : 'HTTP/1.1',
                         $code,
                         self::$codes[$code]),
                     true,
                     $code
                 );
             }
-        }
-        else {
+        } else {
             throw new \Exception('Invalid status code.');
         }
 

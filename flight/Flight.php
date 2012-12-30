@@ -85,25 +85,24 @@ class Flight
             // Handle exceptions internally
             set_exception_handler(array(__CLASS__, 'handleException'));
 
-            // Fix magic quotes
-            if (get_magic_quotes_gpc()) {
-                $func = function ($value) use (&$func) {
-                    return is_array($value) ? array_map($func, $value) : stripslashes($value);
-                };
-                $_GET = array_map($func, $_GET);
-                $_POST = array_map($func, $_POST);
-                $_COOKIE = array_map($func, $_COOKIE);
-            }
-
             // Load configuration params
             self::config($app . '/config/' . $config);
 
             // Load core components
-            self::$loader = new \flight\core\Loader();
-            self::$dispatcher = new \flight\core\Dispatcher();
+            if (self::$loader == null) {
+                self::$loader = new \flight\core\Loader();
+                self::$loader->start();
+            } else {
+                self::$loader->reset();
+            }
 
-            // Initialize autoloading
-            self::$loader->init();
+            if (self::$dispatcher == null) {
+                self::$dispatcher = new \flight\core\Dispatcher();
+            } else {
+                self::$dispatcher->reset();
+            }
+
+            // Register framework directory
             self::$loader->addDirectory(dirname(__DIR__));
 
             // Register default components
@@ -141,8 +140,6 @@ class Flight
 
             // Enable output buffering
             ob_start();
-
-            $initialized = true;
         }
     }
 
@@ -459,10 +456,10 @@ class Flight
      */
     public static function _etag($id, $type = 'strong')
     {
-        $id = (($type === 'weak') ? 'W/' : '').$id;
+        $id = (($type === 'weak') ? 'W/' : '') . $id;
 
         self::response()->header('ETag', $id);
-        
+
         if ($id === getenv('HTTP_IF_NONE_MATCH')) {
             self::halt(304);
         }
@@ -509,13 +506,13 @@ class Flight
 
             $dbFactory = Flight::get('dbFactory');
 
-            foreach($dbFactory as $db_key => $db) {
+            foreach ($dbFactory as $db_key => $db) {
 
                 $db_class = 'flight/util/' . $db['class'] . '.php';
 
                 if (is_file($db_class)) {
                     require_once $db_class;
-                    self::register($db_key,  '\\' . $db['class'], array($db['connectionString'], $db['username'], $db['password'], $db['options']));
+                    self::register($db_key, '\\' . $db['class'], array($db['connectionString'], $db['username'], $db['password'], $db['options']));
                 }
             }
         }
@@ -526,7 +523,7 @@ class Flight
         if (Flight::has('routes')) {
 
             $routes = Flight::get('routes');
-            foreach($routes as $r_key => $route) {
+            foreach ($routes as $r_key => $route) {
                 self::route($r_key, $route);
             }
         }

@@ -146,15 +146,15 @@ class PDOWrapper extends PDO
             $sql .= " WHERE " . $where;
         }
 
-        if(!is_null($order)) {
+        if (!is_null($order)) {
             $sql .= ' ORDER BY ' . $order;
         }
 
-        if(isset($limit[0])) {
+        if (isset($limit[0])) {
             $sql .= ' LIMIT ' . $limit[0];
         }
 
-        if(isset($limit[1])) {
+        if (isset($limit[1])) {
             $sql .= ',' . $limit[1];
         }
 

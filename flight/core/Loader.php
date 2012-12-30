@@ -35,7 +35,7 @@ class Loader
      *
      * @var array
      */
-    protected $dirs = array('.', __DIR__);
+    protected $dirs = array();
 
     /**
      * Registers a class.
@@ -105,7 +105,7 @@ class Loader
     public function getInstance($name, $class = null, array $params = array())
     {
         if (!isset($this->instances[$name])) {
-            if(is_null($class)) {
+            if (is_null($class)) {
                 $class = $name;
             }
             $this->instances[$name] = $this->newInstance($class, $params);
@@ -159,17 +159,19 @@ class Loader
     }
 
     /**
-     * Initializes the autoloader.
+     * Starts autoloader.
      */
-    public function init()
+    public function start()
     {
-        static $initialized = false;
+        spl_autoload_register(array($this, 'autoload'));
+    }
 
-        if (!$initialized) {
-            spl_autoload_register(array(__CLASS__, 'autoload'));
-
-            $initialized = true;
-        }
+    /**
+     * Stops autoloading.
+     */
+    public function stop()
+    {
+        spl_autoload_unregister(array($this, 'autoload'));
     }
 
     /**
@@ -194,7 +196,17 @@ class Loader
         $loaders = spl_autoload_functions();
         $loader = array_pop($loaders);
         if (is_array($loader) && $loader[0] == __CLASS__ && $loader[1] == __FUNCTION__) {
-            throw new \Exception('Unable to load file: '.$class_file);
+            throw new \Exception('Unable to load file: ' . $class_file);
         }
+    }
+
+    /**
+     * Resets the object to the initial state.
+     */
+    public function reset()
+    {
+        $this->classes = array();
+        $this->instances = array();
+        $this->dirs = array();
     }
 }
