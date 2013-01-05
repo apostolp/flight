@@ -37,7 +37,7 @@ class Dispatcher
      * @param array $params Callback parameters
      * @return string Output of callback
      */
-    public function run($name, $params)
+    public function run($name, array $params = array()) 
     {
         $output = '';
 
@@ -123,8 +123,8 @@ class Dispatcher
      * Executes a chain of method filters.
      *
      * @param array $filters Chain of filters
-     * @param object $params Method parameters
-     * @param object $output Method output
+     * @param array $params Method parameters
+     * @param mixed $output Method output
      */
     public function filter($filters, &$params, &$output)
     {
