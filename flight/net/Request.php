@@ -46,9 +46,9 @@ class Request
             $config = array(
                 'url' => getenv('REQUEST_URI') ? : '/',
                 'base' => str_replace('\\', '/', dirname(getenv('SCRIPT_NAME'))),
-                'method' => getenv('REQUEST_METHOD') ? : 'GET',
-                'referrer' => getenv('HTTP_REFERER') ? : '',
-                'ip' => $this->getIpAddress(),
+                'method' => getenv('REQUEST_METHOD') ?: 'GET',
+                'referrer' => getenv('HTTP_REFERER') ?: '',
+                'ip' => getenv('REMOTE_ADDR') ?: '',
                 'ajax' => getenv('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest',
                 'scheme' => getenv('SERVER_PROTOCOL') ? : 'HTTP/1.1',
                 'user_agent' => getenv('HTTP_USER_AGENT') ? : '',
@@ -58,7 +58,10 @@ class Request
                 'query' => new Collection($_GET),
                 'data' => new Collection($_POST),
                 'cookies' => new Collection($_COOKIE),
-                'files' => new Collection($_FILES)
+                'files' => new Collection($_FILES),
+                'secure' => getenv('HTTPS') && getenv('HTTPS') != 'off',
+                'accept' => getenv('HTTP_ACCEPT'),
+                'proxy_ip' => $this->getProxyIpAddress()
             );
         }
 
@@ -112,24 +115,24 @@ class Request
      *
      * @return string IP address
      */
-    private function getIpAddress()
+    private function getProxyIpAddress()
     {
-        static $vars = array(
+        static $forwarded = array(
             'HTTP_CLIENT_IP',
             'HTTP_X_FORWARDED_FOR',
             'HTTP_X_FORWARDED',
             'HTTP_X_CLUSTER_CLIENT_IP',
             'HTTP_FORWARDED_FOR',
-            'HTTP_FORWARDED',
-            'REMOTE_ADDR'
+            'HTTP_FORWARDED'
         );
 
-        foreach ($vars as $key) {
-            if (array_key_exists($key, $_SERVER) === true) {
-                foreach (explode(',', $_SERVER[$key]) as $ip) {
-                    if (filter_var($ip, FILTER_VALIDATE_IP) !== false) {
-                        return $ip;
-                    }
+        $flags = \FILTER_FLAG_NO_PRIV_RANGE | \FILTER_FLAG_NO_RES_RANGE;
+
+        foreach ($forwarded as $key) {
+            if (array_key_exists($key, $_SERVER)) {
+                sscanf($_SERVER[$key], '%[^,]', $ip);
+                if (filter_var($ip, \FILTER_VALIDATE_IP, $flags) !== false) {
+                    return $ip;
                 }
             }
         }
