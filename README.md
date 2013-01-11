@@ -1,3 +1,125 @@
+# What is FlightMVC?
+
+FlightMVC is a fast, simple, extensible framework for PHP with integrated MVC pattern used Flight framework as core.
+
+# Quick Start
+
+First of all, download the source code from GitHub FlightMVC https://github.com/apostolp/flight or pull using Git
+
+# App - MVC - create an application directory structure
+
+ /app
+
+   -- /config
+
+   -- /controllers
+
+   -- /models
+
+   -- /views
+
+ /flight
+
+ /.htaccess
+
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+
+ /index.php
+
+    $app = dirname(__FILE__) . '/app';
+    $config = 'main.php';
+
+    require 'flight/Flight.php';
+
+    Flight::start();
+
+
+# app/config
+
+set in root www directory in index.php file
+    $config = 'main.php';
+
+path - app/main.php
+
+example for multiple DB connections
+
+return array(
+
+    'dbFactory' =>
+        array(
+        'db' => array(
+            'class' => 'PDOWrapper',
+            'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=cdcol',
+            'username' => 'root',
+            'password' => '',
+            'options' => array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'),
+            ),
+        'db2' => array(
+            'class' => 'PDOWrapper',
+            'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=calendar',
+            'username' => 'root',
+            'password' => '',
+            'options' => array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'),
+        ),
+
+	),
+	);
+
+    $db = Flight::db();
+
+    $db2 = Flight::db2();
+
+example config routes
+
+    'routes' =>
+        array(
+            '/' => array('\controllers\Index', 'start'),
+            '/@name/@id:[0-9]+' => array('\controllers\Test','test'),
+        ),
+
+# example app/controllers - Test.php
+
+    namespace controllers;
+
+    use flight;
+
+    class Test
+    {
+        public static function test()
+        {
+            $users = new \models\Users();
+
+       	    Flight::render('test_test.php', array('model' => $users->getResults()));
+        }
+    }
+
+# example app/models - Users.php
+
+    namespace models;
+
+    use flight;
+
+    class Users
+    {
+
+        public function getResults()
+        {
+            $db = Flight::db();
+            $results = $db->select("cds");
+
+            return $results;
+        }
+    }
+
+# example app/views - test_test.php
+
+    print_r($model);
+
+
+
 # What is Flight?
 
 Flight is a fast, simple, extensible framework for PHP.
@@ -224,112 +346,6 @@ Appropriate PDO Driver(s) - PDO_SQLITE, PDO_MYSQL, PDO_PGSQL
     // This will create an object with the defined parameters in app config see section "App config"
 
     $db = Flight::db();
-
-
-# App - MVC
-
- app
- 
-   -- config
-   
-   -- controllers
-   
-   -- models
-   
-   -- views
-
-
-/index.php
-
-    $app = dirname(__FILE__) . '/app';
-    $config = 'main.php';
-    
-    require 'flight/Flight.php';
-    
-    Flight::start();
-
-
-# app/config
-
-set in root www directory index.php    
-    $config = 'main.php';
-
-path - app/main.php
-
-example for multiple DB connections
-
-return array(
-
-    'dbFactory' =>
-        array(
-        'db' => array(
-            'class' => 'PDOWrapper',
-            'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=cdcol',
-            'username' => 'root',
-            'password' => '',
-            'options' => array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'),
-            ),
-        'db2' => array(
-            'class' => 'PDOWrapper',
-            'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=calendar',
-            'username' => 'root',
-            'password' => '',
-            'options' => array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'),
-        ),
-
-	),
-	);
-
-    $db = Flight::db();
-
-    $db2 = Flight::db2();
-    
-example config routes
-
-    'routes' =>
-        array(
-            '/' => array('\controllers\Index', 'start'),
-            '/@name/@id:[0-9]+' => array('\controllers\Test','test'),
-        ),
-
-# app/controllers
-
-    namespace controllers;
-
-    use flight;
-
-    class Test
-    {
-        public static function test()
-        {
-            $users = new \models\Users();
-
-       	    Flight::render('test_test.php', array('model' => $users->getResults()));
-        }
-    }
-    
-# app/models
-
-    namespace models;
-
-    use flight;
-
-    class Users
-    {
-
-        public function getResults()
-        {
-            $db = Flight::db();
-            $results = $db->select("cds");
-
-            return $results;
-        }
-    }
-
-# app/views
-
-    print_r($model);
-    
 
 # Overriding
 
