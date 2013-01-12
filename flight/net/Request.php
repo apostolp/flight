@@ -60,7 +60,7 @@ class Request
                 'cookies' => new Collection($_COOKIE),
                 'files' => new Collection($_FILES),
                 'secure' => getenv('HTTPS') && getenv('HTTPS') != 'off',
-                'accept' => getenv('HTTP_ACCEPT'),
+                'accept' => getenv('HTTP_ACCEPT') ?: '',
                 'proxy_ip' => $this->getProxyIpAddress()
             );
         }
@@ -85,8 +85,9 @@ class Request
 
         if (empty($this->url)) {
             $this->url = '/';
-        } else {
-            $_GET = self::parseQuery($this->url);
+        }
+        else {
+            $_GET += self::parseQuery($this->url);
 
             $this->query->setData($_GET);
         }
