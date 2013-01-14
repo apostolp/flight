@@ -182,7 +182,7 @@ class Loader
      */
     public function autoload($class)
     {
-        $class_file = str_replace('\\', '/', str_replace('_', '/', $class)) . '.php';
+        $class_file = str_replace('\\', '/', $class) . '.php';
 
         foreach ($this->dirs as $dir) {
             $file = $dir . '/' . $class_file;
