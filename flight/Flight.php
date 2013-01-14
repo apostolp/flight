@@ -123,7 +123,6 @@ class Flight
             }
 
             // Default settings
-            self::set('flight.views.path', './views');
             self::set('flight.log_errors', false);
 
             // mvc path
