@@ -94,33 +94,14 @@ class Router
         $pattern = str_replace(')', ')?', $pattern);
 
         // Build the regex for matching
-<<<<<<< HEAD
-        $regex = '/^' . implode('\/', array_map(
-            function ($str) use (&$ids) {
-                if ($str == '*') {
-                    $str = '(.*)';
-                } else if ($str != null && $str{0} == '@') {
-                    if (preg_match('/@(\w+)(\:([^\/|\(]*))?([\(|\)]+)?/', $str, $matches)) {
-                        $ids[$matches[1]] = null;
-                        return '(?P<' . $matches[1] . '>'
-                            . (!empty($matches[3]) ? $matches[3] : '[^(\/|\?)]+')
-                            . ')'
-                            . (!empty($matches[4]) ? str_replace(')', ')?', $matches[4]) : '');
-                    }
-                }
-                return $str;
-            },
-            explode('/', $pattern)
-        )) . '\/?(?:\?.*)?$/i';
-=======
         $regex = preg_replace_callback(
             '#@([\w]+)(:([^/\(\)]*))?#',
-            function($matches) use (&$ids) {
+            function ($matches) use (&$ids) {
                 $ids[$matches[1]] = null;
                 if (isset($matches[3])) {
-                    return '(?P<'.$matches[1].'>'.$matches[3].')';
+                    return '(?P<' . $matches[1] . '>' . $matches[3] . ')';
                 }
-                return '(?P<'.$matches[1].'>[^/\?]+)';
+                return '(?P<' . $matches[1] . '>[^/\?]+)';
             },
             $pattern
         );
@@ -128,19 +109,16 @@ class Router
         // Fix trailing slash
         if ($char === '/') {
             $regex .= '?';
-        }
-        // Replace wildcard
+        } // Replace wildcard
         else if ($char === '*') {
             $regex = str_replace('*', '.+?', $pattern);
-        }
-        // Allow trailing slash
+        } // Allow trailing slash
         else {
             $regex .= '/?';
         }
->>>>>>> 4cf069a5523409ff0efb02deedf08df5547b7d51
 
         // Attempt to match route and named parameters
-        if (preg_match('#^'.$regex.'(?:\?.*)?$#i', $url, $matches)) {
+        if (preg_match('#^' . $regex . '(?:\?.*)?$#i', $url, $matches)) {
             foreach ($ids as $k => $v) {
                 $this->params[$k] = (array_key_exists($k, $matches)) ? urldecode($matches[$k]) : null;
             }
