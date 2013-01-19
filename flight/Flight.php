@@ -116,7 +116,7 @@ class Flight
             // Register framework methods
             $methods = array(
                 'start', 'stop', 'route', 'halt', 'error', 'notFound',
-                'render', 'redirect', 'etag', 'lastModified', 'json'
+                'render', 'redirect', 'etag', 'lastModified', 'json', 'console'
             );
             foreach ($methods as $name) {
                 self::$dispatcher->set($name, array(__CLASS__, '_' . $name));
@@ -479,6 +479,30 @@ class Flight
     }
 
     /**
+     * Start framework in console mode
+     *
+     */
+    public static function _console()
+    {
+        if(isset($_SERVER['argv'][1])) {
+
+            $command = $_SERVER['argv'][1];
+            $argv = array();
+            if(isset($_SERVER['argv'][2])) {
+                for($i = 2; $i < count($_SERVER['argv']); $i++) {
+                    $argv[] = $_SERVER['argv'][$i];
+                }
+            }
+
+            call_user_func(array("\\console\\" . $command , "run"), $argv);
+
+        } else {
+            die("Not set param [command]\n");
+        }
+
+    }
+
+    /**
      * Load configuration params from file
      *
      * @param string $config
@@ -507,7 +531,7 @@ class Flight
 
             foreach ($dbFactory as $db_key => $db) {
 
-                $db_class = 'flight/util/' . $db['class'] . '.php';
+                $db_class = dirname(__FILE__) . '/util/' . $db['class'] . '.php';
 
                 if (is_file($db_class)) {
                     require_once $db_class;
