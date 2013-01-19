@@ -118,7 +118,33 @@ example config routes
 
     print_r($model);
 
+# Console command support
 
+/cron.php
+
+    $app = dirname(__FILE__) . '/app';
+    $config = 'main.php';
+
+    require 'flight/Flight.php';
+
+    Flight::console();
+
+
+/app/console/Test.php
+
+    namespace console;
+
+    use flight;
+
+    class Test
+    {
+        public static function run($args)
+        {
+            var_dump($args);
+        }
+    }
+
+RUN: php cron.php test 1 2 3
 
 # What is Flight?
 
@@ -735,6 +761,8 @@ extensible methods, which can be filtered or overridden.
     Flight::lastModified($time) - Performs last modified HTTP caching.
 
     Flight::json($data) - Sends a JSON response.
+
+    Flight::console() - Starts the framework in console mode.
 
 Any custom methods added with `map` and `register` can also be filtered.
 
