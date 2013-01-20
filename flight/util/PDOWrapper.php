@@ -1,6 +1,8 @@
 <?php
 
-class PDOWrapper extends PDO
+namespace flight\util;
+
+class PDOWrapper extends \PDO
 {
     private $error;
     private $sql;
@@ -10,13 +12,13 @@ class PDOWrapper extends PDO
 
     public function __construct($dsn, $user = "", $passwd = "", $options = array())
     {
-        $options[PDO::ATTR_PERSISTENT] = true;
-        $options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
-        $options[PDO::ATTR_DEFAULT_FETCH_MODE] = PDO::FETCH_ASSOC;
+        $options[\PDO::ATTR_PERSISTENT] = true;
+        $options[\PDO::ATTR_ERRMODE] = \PDO::ERRMODE_EXCEPTION;
+        $options[\PDO::ATTR_DEFAULT_FETCH_MODE] = \PDO::FETCH_ASSOC;
 
         try {
             parent::__construct($dsn, $user, $passwd, $options);
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $this->error = $e->getMessage();
         }
     }
@@ -119,11 +121,11 @@ class PDOWrapper extends PDO
             $pdostmt = $this->prepare($this->sql);
             if ($pdostmt->execute($this->bind) !== false) {
                 if (preg_match("/^(" . implode("|", array("select", "describe", "pragma")) . ") /i", $this->sql))
-                    return $pdostmt->fetchAll(PDO::FETCH_ASSOC);
+                    return $pdostmt->fetchAll(\PDO::FETCH_ASSOC);
                 elseif (preg_match("/^(" . implode("|", array("delete", "insert", "update")) . ") /i", $this->sql))
                     return $pdostmt->rowCount();
             }
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $this->error = $e->getMessage();
             $this->debug();
             return false;

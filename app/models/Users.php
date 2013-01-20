@@ -7,10 +7,19 @@ use flight;
 class Users
 {
 
+    /**
+     * @var flight\util\PDOWrapper $db
+     */
+    public $db;
+
+    public function __construct()
+    {
+        $this->db = Flight::db();
+    }
+
     public function getResults()
     {
-        $db = Flight::db();
-        $results = $db->select("cds");
+        $results = $this->db->select("cds");
 
         return $results;
     }

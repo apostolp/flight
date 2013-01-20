@@ -7,7 +7,7 @@ namespace flight\util;
  *
  * Examples
  * Cache::setCacheDir('Cache');
- * Cache::setObject('obj', $obj);
+ * Cache::setObject('obj', $obj, 100);
  * Cache::getObject('obj');
  *
  */
@@ -24,6 +24,8 @@ class FileCache
     }
 
     /**
+     * setObject - add object to cache
+     *
      * @param $id_str_name
      * @param $object
      * @param $time_in_sec - defaults 180
@@ -35,8 +37,10 @@ class FileCache
     }
 
     /**
+     * getObject - get object from cache or false if object has been expired or does not exists
+     *
      * @param $id_str_name
-     * @return object or false if object has been expired or does not exists
+     * @return object or false
      */
     public static function getObject ($id_str_name)
     {
@@ -51,6 +55,8 @@ class FileCache
     }
 
     /**
+     * setCacheDir - set cache directory
+     *
      * @param $path
      * @return bool
      */
@@ -63,6 +69,9 @@ class FileCache
         return is_dir(self::$dir);
     }
 
+    /**
+     *  clear - clear all cache files
+     */
     public static function clear()
     {
         $it = new RecursiveDirectoryIterator(self::$dir);

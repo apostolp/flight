@@ -13,7 +13,7 @@ include __DIR__ . '/core/Dispatcher.php';
  * The Flight class represents the framework itself. It is responsible
  * loading an HTTP request, running the assigned services, and generating
  * an HTTP response.
- */
+  */
 class Flight
 {
     /**
@@ -133,6 +133,9 @@ class Flight
 
             // added routes from config
             self::initRoutes();
+
+            // initialize cache
+            self::initCache();
 
             // set views path
             self::set('flight.views.path', $app . '/views/');
@@ -503,11 +506,11 @@ class Flight
     }
 
     /**
-     * Load configuration params from file
+     * config - Load configuration params from file
      *
      * @param string $config
      */
-    public static function config($config)
+    private static function config($config)
     {
         if (is_file($config)) {
 
@@ -523,7 +526,10 @@ class Flight
         }
     }
 
-    public static function initDbFactory()
+    /**
+     * initDbFactory - initialize DB factory from config file
+     */
+    private static function initDbFactory()
     {
         if (Flight::has('dbFactory')) {
 
@@ -534,20 +540,39 @@ class Flight
                 $db_class = dirname(__FILE__) . '/util/' . $db['class'] . '.php';
 
                 if (is_file($db_class)) {
-                    require_once $db_class;
-                    self::register($db_key, '\\' . $db['class'], array($db['connectionString'], $db['username'], $db['password'], $db['options']));
+
+                    self::register($db_key, '\\flight\\util\\' . $db['class'], array($db['connectionString'], $db['username'], $db['password'], $db['options']));
                 }
             }
         }
     }
 
-    public static function initRoutes()
+    /**
+     *  initRoutes - initialize Routes from config file
+     */
+    private static function initRoutes()
     {
         if (Flight::has('routes')) {
 
             $routes = Flight::get('routes');
             foreach ($routes as $r_key => $route) {
                 self::route($r_key, $route);
+            }
+        }
+    }
+
+    /**
+     *  initCache - initialize Cache class
+     */
+    private static function initCache()
+    {
+        if (Flight::has('cache')) {
+
+            $cache = Flight::get('cache');
+            self::register('cache', '\\flight\\util\\' . $cache['class']);
+
+            if(isset($cache['cache_dir'])) {
+                Flight::cache()->setCacheDir($cache['cache_dir']);
             }
         }
     }
