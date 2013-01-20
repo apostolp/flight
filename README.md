@@ -146,6 +146,41 @@ example config routes
 
 RUN: php cron.php test 1 2 3
 
+
+# Cache on file system supported
+
+path - app/main.php
+
+    'cache' =>
+        array(
+            'class' => 'FileCache',
+            'cache_dir' => 'app/cache',
+        ),
+
+add object to cache
+
+    Flight::cache()->setObject('obj', $obj, 100);
+
+get object from cache
+
+    Flight::cache()->getObject('obj');
+
+
+# Type hinting in PHPStorm
+
+add autocomplete for DB PDOWrapper
+
+    /**
+    * @var flight\util\PDOWrapper $db
+    */
+    public $db;
+
+    public function __construct()
+    {
+        $this->db = Flight::db();
+    }
+
+
 # What is Flight?
 
 Flight is a fast, simple, extensible framework for PHP.
