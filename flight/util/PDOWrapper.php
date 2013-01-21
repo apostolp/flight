@@ -69,7 +69,7 @@ class PDOWrapper extends \PDO
 
     private function filter($table, $info)
     {
-        $driver = $this->getAttribute(PDO::ATTR_DRIVER_NAME);
+        $driver = $this->getAttribute(\PDO::ATTR_DRIVER_NAME);
         if ($driver == 'sqlite') {
             $sql = "PRAGMA table_info('" . $table . "');";
             $key = "name";
