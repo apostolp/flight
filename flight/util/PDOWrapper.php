@@ -184,11 +184,25 @@ class PDOWrapper extends \PDO
         $fields = $this->filter($table, $info);
         $fieldSize = sizeof($fields);
 
+        foreach ($info as $fieldName => $fieldValue) {
+            $result = array();
+            $pattern = '/(' . $fieldName . '\s?[\+|\-|\*|\/]\s?\d+)/is';
+            $find = preg_match($pattern, $fieldValue, $result);
+            if ($find) {
+                $matchedValue[$fieldName] = $result[1];
+            }
+        }
+
         $sql = "UPDATE " . $table . " SET ";
         for ($f = 0; $f < $fieldSize; ++$f) {
             if ($f > 0)
                 $sql .= ", ";
-            $sql .= $fields[$f] . " = :update_" . $fields[$f];
+
+            if (!empty($matchedValue) && array_key_exists($fields[$f], $matchedValue)) {
+                $sql .= $fields[$f] . " = " .  $matchedValue[$fields[$f]];
+            } else {
+                $sql .= $fields[$f] . " = :update_" . $fields[$f];
+            }
         }
         $sql .= " WHERE " . $where . ";";
 
