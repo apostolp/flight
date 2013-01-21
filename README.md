@@ -803,5 +803,5 @@ Any custom methods added with `map` and `register` can also be filtered.
 
 ## TODO
 
-- Caching - cache object on filesystem
+- Session handler
 - createUrl - creating url 
