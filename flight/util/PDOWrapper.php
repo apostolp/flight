@@ -200,6 +200,7 @@ class PDOWrapper extends \PDO
 
             if (!empty($matchedValue) && array_key_exists($fields[$f], $matchedValue)) {
                 $sql .= $fields[$f] . " = " .  $matchedValue[$fields[$f]];
+                $unbind[] = ":update_" . $fields[$f];
             } else {
                 $sql .= $fields[$f] . " = :update_" . $fields[$f];
             }
@@ -209,6 +210,11 @@ class PDOWrapper extends \PDO
         $bind = $this->cleanup($bind);
         foreach ($fields as $field)
             $bind[":update_$field"] = $info[$field];
+
+        if (!empty($unbind)) {
+            foreach ($unbind as $unbindValue)
+                unset($bind[$unbindValue]);
+        }
 
         return $this->run($sql, $bind);
     }
