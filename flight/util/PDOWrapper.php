@@ -9,6 +9,7 @@ class PDOWrapper extends \PDO
     private $bind;
     private $errorCallbackFunction;
     private $errorMsgFormat;
+    private $queryError = array();
 
     public function __construct($dsn, $user = "", $passwd = "", $options = array())
     {
@@ -20,6 +21,16 @@ class PDOWrapper extends \PDO
             parent::__construct($dsn, $user, $passwd, $options);
         } catch (\PDOException $e) {
             $this->error = $e->getMessage();
+        }
+
+    }
+
+    public function __destruct ()
+    {
+        if ($this->queryError) {
+            echo '<br><br>';
+            foreach ($this->queryError as $error)
+                echo $error . '<br>';
         }
     }
 
@@ -85,6 +96,30 @@ class PDOWrapper extends \PDO
             $fields = array();
             foreach ($list as $record)
                 $fields[] = $record[$key];
+
+            $params = array_keys($info);
+            foreach ($params as $param) {
+                if (!in_array($param, $fields)) {
+                    $wrongFields[] = $param;
+                }
+            }
+
+            if (!empty($wrongFields)) {
+                $fieldList = "";
+                for ($n = 0; $n < count($wrongFields); $n++) {
+                    $fieldList .= "'$wrongFields[$n]'";
+
+                    if ($n != count($wrongFields) - 1) {
+                        $fieldList .= ", ";
+                    }
+                }
+
+                $errorMsg = "Error in setting fieldnames or some of following fields <strong>$fieldList</strong>
+                            doesn't exist in database table <strong>'$table'</strong>.";
+                $this->queryError[] = $errorMsg;
+
+            }
+
             return array_values(array_intersect($fields, array_keys($info)));
         }
         return array();
