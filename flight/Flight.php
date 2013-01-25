@@ -137,6 +137,9 @@ class Flight
             // initialize cache
             self::initCache();
 
+            // initialize UrlManager
+            self::initUrlManager();
+
             // set views path
             self::set('flight.views.path', $app . '/views/');
 
@@ -576,6 +579,29 @@ class Flight
             }
         }
     }
+
+
+    /**
+     *  initUrlManager - initialize UrlManager class
+     */
+    private static function initUrlManager()
+    {
+        $method = 'urlManager';
+        $class = 'UrlManager';
+        $fileClass = dirname(__FILE__) . '/util/' . $class . '.php';;
+
+        if (Flight::has('routes')) {
+            $routes = Flight::get('routes');
+            if (is_file($fileClass)) {
+                self::register($method, '\\flight\\util\\' . $class, array($routes));
+            }
+        } else {
+            throw new ErrorException ('Init UrlManager error. Routes absent.');
+        }
+    }
+
+
+
 
 }
 
