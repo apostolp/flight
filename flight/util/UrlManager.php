@@ -46,15 +46,7 @@ class UrlManager
         $routes = self::$routes;
 
         $routeExplode = explode('/', $route);
-
-        for ($j = 0; $j < count($routeExplode); $j++) {
-            if ($j == 0)
-                $route = '';
-
-            $route .= $routeExplode[$j];
-            if ($j != count($routeExplode) - 1)
-                $route .= '\\';
-        }
+        $route = implode('\\', $routeExplode);
 
         $pattern = '/' . addslashes($route) . '/is';
 
