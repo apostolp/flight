@@ -33,11 +33,15 @@ class UrlManager
      * Method check route and parameters for matching routes
      * and generate link with parameters in order of matched rule.
      *
-     * @param string $route - example '/controllers/ClassName'
+     * @example Flight::urlManager()->createUrl('/controllers/ControllerName', 'action', array('param1' => 'value1', 'param2' => 'value2',));
+     *
+     * @param $route
+     * @param $action
      * @param array $params
      * @return string
+     * @throws \ErrorException
      */
-    public static function createUrl($route, $params = array())
+    public static function createUrl($route, $action, $params = array())
     {
 
         if (empty(self::$routes))
@@ -52,8 +56,9 @@ class UrlManager
 
         $matches = array();
         foreach ($routes as $routeKey => $routeVal) {
-            $res = preg_match($pattern, $routeVal[0]);
-            if ($res) {
+            $issetRoute = preg_match($pattern, $routeVal[0]);
+            $issetAction = preg_match('/' . $action . '/', $routeVal[1]);
+            if ($issetRoute && $issetAction) {
                 $tmp['controller'] = $routeVal[0];
                 $tmp['action'] = $routeVal[1];
                 $tmp['pattern'] = $routeKey;
@@ -71,7 +76,7 @@ class UrlManager
                 $matchParam[$m][] = preg_match('/@' . $paramKey . '/', $matches[$m]['pattern']);
             }
 
-            if (array_product($matchParam[$m])) {
+            if (array_product($matchParam[$m]) && substr_count($matches[$m]['pattern'] ,'@') == count($params)) {
                 $resultRule[] = $matches[$m];
             }
         }
@@ -79,24 +84,12 @@ class UrlManager
         if (empty($resultRule))
             throw new \ErrorException('No rules matched for creating links.', '23', 1, __FILE__, __LINE__);
 
-        $paramPos = array();
+        $uri = $resultRule[0]['pattern'];
+
         foreach ($params as $paramKey => $paramVal) {
-            for ($n = 0; $n < count($resultRule); $n++) {
-                if (substr_count($resultRule[$n]['pattern'], '@') == count($params))
-                    $paramPos[strpos($resultRule[$n]['pattern'], $paramKey)] = $paramKey;
+            $pattern = '/@' .$paramKey. '[^\/]*/';
+            $uri = preg_replace($pattern, $paramVal, $uri);
             }
-        }
-
-        if (count($paramPos) != count($params))
-            throw new \ErrorException('Incorrect specifying of parameters quantity.', '24', 1, __FILE__, __LINE__);
-
-        ksort($paramPos);
-        $paramPos = array_values($paramPos);
-
-
-        $uri = '';
-        foreach ($paramPos as $v)
-            $uri .='/' . $params[$v];
 
         return self::getAbsoluteUrl() . $uri;
 
@@ -112,7 +105,8 @@ class UrlManager
         if (self::$absoluteUrl)
             return self::$absoluteUrl;
 
-        $host = 'http://' . $_SERVER['HTTP_HOST'];
+        $prefix = (isset($_SERVER['HTTPS'])) ? 'https://' : 'http://';
+        $host = $prefix . $_SERVER['HTTP_HOST'];
         $path = $_SERVER['SCRIPT_NAME'];
 
         $url = $host . $path;
