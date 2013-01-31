@@ -21,31 +21,35 @@ First of all, download the source code from GitHub FlightMVC https://github.com/
  /flight
 
  /.htaccess
-
+```
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php [QSA,L]
+```
 
  /index.php
-
+```php
     $app = dirname(__FILE__) . '/app';
     $config = 'main.php';
 
     require 'flight/Flight.php';
 
     Flight::start();
-
+```
 
 # app/config
 
 set in root www directory in index.php file
+```php
     $config = 'main.php';
+```
 
 path - app/main.php
 
 example for multiple DB connections
 
+```php
 return array(
 
     'dbFactory' =>
@@ -71,17 +75,21 @@ return array(
     $db = Flight::db();
 
     $db2 = Flight::db2();
+```
 
 example config routes
 
+```php
     'routes' =>
         array(
             '/' => array('\controllers\Index', 'start'),
             '/@name/@id:[0-9]+' => array('\controllers\Test','test'),
         ),
+```
 
 # example app/controllers - Test.php
 
+```php
     namespace controllers;
 
     use flight;
@@ -95,9 +103,11 @@ example config routes
        	    Flight::render('test_test.php', array('model' => $users->getResults()));
         }
     }
+```
 
 # example app/models - Users.php
 
+```php
     namespace models;
 
     use flight;
@@ -113,25 +123,30 @@ example config routes
             return $results;
         }
     }
+```
 
 # example app/views - test_test.php
 
+```php
     print_r($model);
+```
 
 # Console command support
 
 /cron.php
 
+```php
     $app = dirname(__FILE__) . '/app';
     $config = 'main.php';
 
     require 'flight/Flight.php';
 
     Flight::console();
-
+```
 
 /app/console/Test.php
 
+```php
     namespace console;
 
     use flight;
@@ -143,6 +158,7 @@ example config routes
             var_dump($args);
         }
     }
+```
 
 RUN: php cron.php test 1 2 3
 
@@ -151,40 +167,44 @@ RUN: php cron.php test 1 2 3
 
 path - app/main.php
 
+```php
     'cache' =>
         array(
             'class' => 'FileCache',
             'cache_dir' => 'app/cache',
         ),
+```
 
 add object to cache
-
-    Flight::cache()->setObject('obj', $obj, 100);
+```php
+    Flight::cache()->setObject('obj', $obj, 100);    
+```
 
 get object from cache
-
+```php
     Flight::cache()->getObject('obj');
-	
+```php	
 
 
 # UrlManager
 
 With UrlManager you can get absolute url or create url with parameters you need.
-
+```php
     Flight::urlManager()->getAbsoluteUrl() - Gets a string.
 
     Flight::urlManager()->createUrl($controller, $action, $params = array()) - Generates url according to specified route.
+```
 
 CreateUrl using example:
-
+```php
     Flight::urlManager()->createUrl('/controllers/ControllerName', 'action', array('param1' => 'value1', 'param2' => 'value2',));
-
+```
 
 
 # Type hinting in PHPStorm
 
 add autocomplete for DB PDOWrapper
-
+```php
     /**
     * @var flight\util\PDOWrapper $db
     */
@@ -194,7 +214,7 @@ add autocomplete for DB PDOWrapper
     {
         $this->db = Flight::db();
     }
-
+```
 
 # What is Flight?
 
