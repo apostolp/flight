@@ -173,11 +173,11 @@ With UrlManager you can get absolute url or create url with parameters you need.
 
     Flight::urlManager()->getAbsoluteUrl() - Gets a string.
 
-    Flight::urlManager()->createUrl($controller, $action, $params = array()) - Generates url according to specified route.
+    Flight::urlManager()->createUrl($route, $params = array()) - Generates url according to specified route.
 
 CreateUrl using example:
 
-    Flight::urlManager()->createUrl('/controllers/ControllerName', 'action', array('param1' => 'value1', 'param2' => 'value2',));
+    Flight::urlManager()->createUrl('ControllerName/action', array('param1' => 'value1', 'param2' => 'value2',));
 
 
 
