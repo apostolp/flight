@@ -477,11 +477,12 @@ Keep in mind that mapped methods have precedence over registered classes. If you
 
 System Requirements: PDO Extension
 Appropriate PDO Driver(s) - PDO_SQLITE, PDO_MYSQL, PDO_PGSQL
-
+```php
     // Get an instance of your class
     // This will create an object with the defined parameters in app config see section "App config"
 
     $db = Flight::db();
+```
 
 # Overriding
 
