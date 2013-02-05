@@ -140,6 +140,9 @@ class Flight
             // initialize UrlManager
             self::initUrlManager();
 
+            // initialize SessionHandler
+            self::initSessionHandler();
+
             // set views path
             self::set('flight.views.path', $app . '/views/');
 
@@ -588,7 +591,7 @@ class Flight
     {
         $method = 'urlManager';
         $class = 'UrlManager';
-        $fileClass = dirname(__FILE__) . '/util/' . $class . '.php';;
+        $fileClass = dirname(__FILE__) . '/util/' . $class . '.php';
 
         if (Flight::has('routes')) {
             $routes = Flight::get('routes');
@@ -597,6 +600,28 @@ class Flight
             }
         } else {
             throw new ErrorException ('Init UrlManager error. Routes absent.');
+        }
+    }
+
+
+    /**
+     *  initSessionHandler - initialize SessionHandler class
+     */
+    private static function initSessionHandler()
+    {
+
+        if (Flight::has('session')) {
+            $method = 'session';
+            $class = 'SessionHandler';
+            $fileClass = dirname(__FILE__) . '/util/' . $class . '.php';
+
+            $sessionConfig = Flight::get('session');
+            if (is_file($fileClass)) {
+               self::register($method, '\\flight\\util\\' . $class, array($sessionConfig));
+            }
+            else {
+                throw new ErrorException ('Init SessionHandler Error.');
+            }
         }
     }
 
