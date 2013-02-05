@@ -45,4 +45,19 @@ return array(
             'cache_dir' => 'app/cache',
         ),
     */
+	
+	/*
+	 * Init session handler
+	 *
+    'session' =>
+        array(
+            'autoStart' => false,
+            // path from root of application
+            'savePath' => '',
+            //int or string '24*60*60'. leave empty if you need max session time.
+            'lifetime' => '',
+            'sessionName' => 'application',
+        ),
+	*/
+	
 );

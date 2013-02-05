@@ -179,6 +179,46 @@ CreateUrl using example:
 
     Flight::urlManager()->createUrl('ControllerName/action', array('param1' => 'value1', 'param2' => 'value2',));
 
+	
+	
+# Session handler
+
+Configuration parameters:
+
+	return array(    
+		'session' =>
+			array(
+				'autoStart' => false,
+				// path from root of application like '/session/' or empty string - default php.ini path
+				'savePath' => '',
+				//int or string '24*60*60' or empty string (max session lifetime).
+				'lifetime' => '',
+				'sessionName' => 'PHPSESSID',
+			),
+	);
+
+How to use:
+
+	$session = Flight::session();
+	$session->open();
+	$session['key'] = 'value';
+	$var = $session['key'];
+
+Or other way to use session:
+	Flight::session()['key'] = 'value';
+	$var = Flight::session()['key'];
+		
+		
+Public methods:
+	open() - open session (no need to use in case 'autoStart' => true)
+	close() - close session
+	getID() - return session id
+	getName() - return session name
+	count() - return number of items in session
+	getKeys() - return array with session variable names
+	remove('key') - return the removed value, null if no such session variable
+	clear() - remove all session variables
+	contains('key') - return boolean
 
 
 # Type hinting in PHPStorm
