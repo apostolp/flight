@@ -51,7 +51,6 @@ return array(
 	 *
     'session' =>
         array(
-            'autoStart' => false,
             // path from root of application
             'savePath' => '',
             //int or string '24*60*60'. leave empty if you need max session time.

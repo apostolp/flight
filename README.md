@@ -188,7 +188,6 @@ Configuration parameters:
 	return array(    
 		'session' =>
 			array(
-				'autoStart' => false,
 				// path from root of application like '/session/' or empty string - default php.ini path
 				'savePath' => '',
 				//int or string '24*60*60' or empty string (max session lifetime).
@@ -200,25 +199,24 @@ Configuration parameters:
 How to use:
 
 	$session = Flight::session();
-	$session->open();
 	$session['key'] = 'value';
 	$var = $session['key'];
 
 Or other way to use session:
-	Flight::session()['key'] = 'value';
-	$var = Flight::session()['key'];
+	Flight::$session['key'] = 'value';
+	$var = Flight::$session['key'];
 		
 		
 Public methods:
-	open() - open session (no need to use in case 'autoStart' => true)
-	close() - close session
-	getID() - return session id
-	getName() - return session name
-	count() - return number of items in session
-	getKeys() - return array with session variable names
-	remove('key') - return the removed value, null if no such session variable
-	clear() - remove all session variables
-	contains('key') - return boolean
+	$session->open() - open session (open by default).
+	$session->close() - close session.
+	$session->getID() - return session id.
+	$session->getName() - return session name.
+	$session->count() - return number of items in session.
+	$session->getKeys() - return array with session variable names.
+	$session->remove('key') - return the removed value, null if no such session variable.
+	$session->clear() - remove all session variables.
+	$session->contains('key') - return boolean.
 
 
 # Type hinting in PHPStorm
