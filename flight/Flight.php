@@ -37,6 +37,12 @@ class Flight
      */
     protected static $dispatcher;
 
+    /**
+     * Session handler var
+     * @var null
+     */
+    public static $session = null;
+
     // Don't allow object instantiation
     private function __construct()
     {
@@ -618,6 +624,7 @@ class Flight
             $sessionConfig = Flight::get('session');
             if (is_file($fileClass)) {
                self::register($method, '\\flight\\util\\' . $class, array($sessionConfig));
+                self::$session = Flight::session();
             }
             else {
                 throw new ErrorException ('Init SessionHandler Error.');

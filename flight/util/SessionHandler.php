@@ -22,10 +22,6 @@ class SessionHandler implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     private static $sessionName;
 
-    /**
-     * @var bool
-     */
-    private static $autoStart = false;
 
     /**
      * @var int
@@ -41,9 +37,7 @@ class SessionHandler implements \IteratorAggregate, \ArrayAccess, \Countable
     {
         $this->setConfig($config);
 
-        if (self::$autoStart) {
-            $this->open();
-        }
+        $this->open();
     }
 
 
@@ -53,9 +47,6 @@ class SessionHandler implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     private function setConfig ($config)
     {
-        if (isset($config['autoStart']))
-            self::$autoStart = $config['autoStart'];
-
         if (isset($config['savePath'])) {
             self::$savePath = rtrim(str_replace(basename($_SERVER['SCRIPT_FILENAME']),
                                 '', $_SERVER['SCRIPT_FILENAME']), '/') . $config['savePath'];
