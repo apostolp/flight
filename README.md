@@ -41,9 +41,9 @@ First of all, download the source code from GitHub FlightMVC https://github.com/
 
 set in root www directory in index.php file
     
-    ```php
+```php
     $config = 'main.php';
-    ```
+```
 
 path - app/main.php
 
@@ -51,7 +51,7 @@ example for multiple DB connections
 
 return array(
 
-    ```php
+```php
     'dbFactory' =>
         array(
         'db' => array(
@@ -75,21 +75,21 @@ return array(
     $db = Flight::db();
 
     $db2 = Flight::db2();
-    ```
+```
 
 example config routes
 
-    ```php
+```php
     'routes' =>
         array(
             '/' => array('\controllers\Index', 'start'),
             '/@name/@id:[0-9]+' => array('\controllers\Test','test'),
         ),
-       ```
+```
 
 # example app/controllers - Test.php
 
-    ```php
+```php
     namespace controllers;
 
     use flight;
@@ -103,7 +103,7 @@ example config routes
        	    Flight::render('test_test.php', array('model' => $users->getResults()));
         }
     }
-    ```
+```
 
 # example app/models - Users.php
 
