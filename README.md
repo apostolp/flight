@@ -123,31 +123,31 @@ example config routes
             return $results;
         }
     }
-    ```
+```
 
 # example app/views - test_test.php
 
-    ```php
+```php
     print_r($model);
-    ```
+```
 
 # Console command support
 
 /cron.php
 
-    ```php
+```php
     $app = dirname(__FILE__) . '/app';
     $config = 'main.php';
 
     require 'flight/Flight.php';
 
     Flight::console();
-    ```
+```
 
 
 /app/console/Test.php
 
-    ```php
+```php
     namespace console;
 
     use flight;
@@ -159,7 +159,7 @@ example config routes
             var_dump($args);
         }
     }
-    ```
+```
 
 RUN: php cron.php test 1 2 3
 
@@ -173,12 +173,12 @@ path - app/main.php
             'class' => 'FileCache',
             'cache_dir' => 'app/cache',
         ),
-        ```
+```
 
 add object to cache
 ```php
     Flight::cache()->setObject('obj', $obj, 100);
-    ```
+```
 
 get object from cache
 
@@ -223,7 +223,7 @@ Configuration parameters:
 				'sessionName' => 'phpSession',
 			),
 	);
-	```
+```
 
 How to use:
 ```php
