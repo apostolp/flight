@@ -29,7 +29,6 @@ class SessionDbHandler extends SessionHandler
     public function __construct($config)
     {
         self::$db = \Flight::$config['useDb']();
-        self::createSessionTable(self::$tableName);
         parent::__construct($config);
     }
 
@@ -44,22 +43,6 @@ class SessionDbHandler extends SessionHandler
     {
         return true;
     }
-
-    /**
-     * Creates the session DB table.
-     * @param string $tableName the name of the table to be created
-     */
-    protected function createSessionTable($tableName)
-    {
-        $sql = "CREATE TABLE IF NOT EXISTS $tableName
-            (id CHAR(32) PRIMARY KEY NOT NULL,
-             expire INTEGER,
-             data TEXT)
-             ENGINE=MyISAM CHARSET=UTF8";
-        self::$db->run($sql);
-    }
-
-
 
 
     /**
