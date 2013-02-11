@@ -15,28 +15,26 @@ class SessionHandler implements \IteratorAggregate, \ArrayAccess, \Countable
     /**
      * @var string
      */
-    private static $savePath;
+    protected static $savePath;
 
     /**
      * @var string
      */
-    private static $sessionName;
-
+    protected static $sessionName;
 
     /**
      * @var int
      */
-    private static $lifetime;
+    protected static $lifetime;
 
 
     /**
-     * Setting configuration and start session in case autoTart option.
+     * Setting configuration and start session in case autoStart option.
      * @param array $config
      */
     public function __construct($config)
     {
         $this->setConfig($config);
-
         $this->open();
     }
 
@@ -45,7 +43,7 @@ class SessionHandler implements \IteratorAggregate, \ArrayAccess, \Countable
      * Setting configuration parameters.
      * @param array $config
      */
-    private function setConfig ($config)
+    protected function setConfig ($config)
     {
         if (isset($config['savePath'])) {
             self::$savePath = rtrim(str_replace(basename($_SERVER['SCRIPT_FILENAME']),
@@ -106,11 +104,11 @@ class SessionHandler implements \IteratorAggregate, \ArrayAccess, \Countable
                 array($this, 'destroySession'), array($this, 'gcSession'));
         }
 
+        register_shutdown_function(array($this, 'close'));
 
         @session_start();
-        session_name(self::$sessionName);
+        @session_name(self::$sessionName);
 
-        register_shutdown_function(array($this, 'close'));
 
         if (!session_id())
             throw new \ErrorException('Session has not started.', '31', 1, __FILE__, __LINE__);
@@ -125,6 +123,20 @@ class SessionHandler implements \IteratorAggregate, \ArrayAccess, \Countable
         if(session_id()!=='')
             @session_write_close();
     }
+
+    /**
+     * Unset all variables and destroy session.
+     */
+    public function destroy()
+    {
+        if(session_id()!=='')
+        {
+            @session_unset();
+            @session_destroy();
+        }
+    }
+
+
 
     /**
      * Session open handler.
@@ -215,6 +227,11 @@ class SessionHandler implements \IteratorAggregate, \ArrayAccess, \Countable
     public function getName ()
     {
         return session_name();
+    }
+
+    protected function getLifetime ()
+    {
+        return self::$lifetime;
     }
 
 

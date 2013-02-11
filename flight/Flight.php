@@ -617,14 +617,14 @@ class Flight
     {
 
         if (Flight::has('session')) {
-            $method = 'session';
-            $class = 'SessionHandler';
-            $fileClass = dirname(__FILE__) . '/util/' . $class . '.php';
-
             $sessionConfig = Flight::get('session');
+            $method = 'session';
+
+            $fileClass = dirname(__FILE__) . '/util/' . $sessionConfig['class'] . '.php';
+
             if (is_file($fileClass)) {
-               self::register($method, '\\flight\\util\\' . $class, array($sessionConfig));
-                self::$session = Flight::session();
+                self::register($method, '\\flight\\util\\' . $sessionConfig['class'], array($sessionConfig));
+                self::$session = Flight::$method();
             }
             else {
                 throw new ErrorException ('Init SessionHandler Error.');
