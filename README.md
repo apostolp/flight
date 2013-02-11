@@ -207,13 +207,20 @@ CreateUrl using example:
 Configuration parameters:
 ```php
 	return array(    
-		'session' =>
+    'session' =>
 			array(
-				// path from root of application like '/session/' or empty string - default php.ini path
-				'savePath' => '',
-				//int or string '24*60*60' or empty string (max session lifetime).
-				'lifetime' => '',
-				'sessionName' => 'PHPSESSID',
+				//specify class handler ( SessionHandler | SessionDbHandler )
+				'class' => 'SessionHandler',
+				//specify savePath if necessary 
+				//(in case using 'SessionHandler' if you dont use custom storage)
+				'savePath' => '/session/',
+				//identifier from dbFactory (in case using 'SessionDbHandler')
+				'useDb' => 'db',
+				//specify table name (in case using 'SessionDbHandler')
+				'tableName' => 'session_data_table',
+				//integer (example: 1800 or 24*60*60).
+				'lifetime' => 24*60*60,
+				'sessionName' => 'phpSession',
 			),
 	);
 	```
@@ -235,6 +242,8 @@ Public methods:
 ```php
 	$session->open() - open session (open by default).
 	$session->close() - close session.
+	$session->destroy() - unset all variables and destroy session.
+	$session->toArray() - return all session variables in array.
 	$session->getID() - return session id.
 	$session->getName() - return session name.
 	$session->count() - return number of items in session.

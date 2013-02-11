@@ -7,7 +7,7 @@ namespace flight\util;
  * SessionHandlerIterator implements an iterator for {@link SessionHandler}.
  * It allows SessionHandler return a new iterator for traversing the session variables.
  */
-class SessionHandlerIterator implements Iterator
+class SessionHandlerIterator implements \Iterator
 {
     /**
      * @var array list of keys in the map
