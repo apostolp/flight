@@ -229,7 +229,7 @@ Configuration parameters:
 
 Before using you need to create table in DB:
 
-		CREATE TABLE IF NOT EXISTS $tableName
+		CREATE TABLE IF NOT EXISTS session_data_table
 		(id CHAR(32) PRIMARY KEY NOT NULL,
 		 expire INTEGER,
 		 data TEXT)
