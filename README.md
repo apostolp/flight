@@ -225,7 +225,16 @@ Configuration parameters:
 	);
 ```
 
-How to use:
+##How to use session:
+
+Before using you need to create table in DB:
+
+		CREATE TABLE IF NOT EXISTS $tableName
+		(id CHAR(32) PRIMARY KEY NOT NULL,
+		 expire INTEGER,
+		 data TEXT)
+
+Then use code:
 ```php
 	$session = Flight::session();
 	$session['key'] = 'value';
