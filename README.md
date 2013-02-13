@@ -28,19 +28,22 @@ First of all, download the source code from GitHub FlightMVC https://github.com/
     RewriteRule ^(.*)$ index.php [QSA,L]
 
  /index.php
-
+```php
     $app = dirname(__FILE__) . '/app';
     $config = 'main.php';
 
     require 'flight/Flight.php';
 
     Flight::start();
-
+```
 
 # app/config
 
 set in root www directory in index.php file
+    
+```php
     $config = 'main.php';
+```
 
 path - app/main.php
 
@@ -48,6 +51,7 @@ example for multiple DB connections
 
 return array(
 
+```php
     'dbFactory' =>
         array(
         'db' => array(
@@ -71,17 +75,21 @@ return array(
     $db = Flight::db();
 
     $db2 = Flight::db2();
+```
 
 example config routes
 
+```php
     'routes' =>
         array(
             '/' => array('\controllers\Index', 'start'),
             '/@name/@id:[0-9]+' => array('\controllers\Test','test'),
         ),
+```
 
 # example app/controllers - Test.php
 
+```php
     namespace controllers;
 
     use flight;
@@ -95,9 +103,11 @@ example config routes
        	    Flight::render('test_test.php', array('model' => $users->getResults()));
         }
     }
+```
 
 # example app/models - Users.php
 
+```php
     namespace models;
 
     use flight;
@@ -113,25 +123,31 @@ example config routes
             return $results;
         }
     }
+```
 
 # example app/views - test_test.php
 
+```php
     print_r($model);
+```
 
 # Console command support
 
 /cron.php
 
+```php
     $app = dirname(__FILE__) . '/app';
     $config = 'main.php';
 
     require 'flight/Flight.php';
 
     Flight::console();
+```
 
 
 /app/console/Test.php
 
+```php
     namespace console;
 
     use flight;
@@ -143,6 +159,7 @@ example config routes
             var_dump($args);
         }
     }
+```
 
 RUN: php cron.php test 1 2 3
 
@@ -150,41 +167,112 @@ RUN: php cron.php test 1 2 3
 # Cache on file system supported
 
 path - app/main.php
-
+```php
     'cache' =>
         array(
             'class' => 'FileCache',
             'cache_dir' => 'app/cache',
         ),
+```
 
 add object to cache
-
+```php
     Flight::cache()->setObject('obj', $obj, 100);
+```
 
 get object from cache
 
+```php
     Flight::cache()->getObject('obj');
-	
+```	
 
 
 # UrlManager
 
 With UrlManager you can get absolute url or create url with parameters you need.
-
+```php
     Flight::urlManager()->getAbsoluteUrl() - Gets a string.
 
     Flight::urlManager()->createUrl($route, $params = array()) - Generates url according to specified route.
+<<<<<<< HEAD
+=======
+```
+>>>>>>> 89a6c64faa0ebec1d19e975dc27122b379db4ba8
 
 CreateUrl using example:
-
+```php
     Flight::urlManager()->createUrl('ControllerName/action', array('param1' => 'value1', 'param2' => 'value2',));
+```
+	
+	
+# Session handler
 
+Configuration parameters:
+```php
+	return array(    
+    'session' =>
+			array(
+				//specify class handler ( SessionHandler | SessionDbHandler )
+				'class' => 'SessionHandler',
+				//specify savePath if necessary 
+				//(in case using 'SessionHandler' if you dont use custom storage)
+				'savePath' => '/session/',
+				//identifier from dbFactory (in case using 'SessionDbHandler')
+				'useDb' => 'db',
+				//specify table name (in case using 'SessionDbHandler')
+				'tableName' => 'session_data_table',
+				//integer (example: 1800 or 24*60*60).
+				'lifetime' => 24*60*60,
+				'sessionName' => 'phpSession',
+			),
+	);
+```
 
+##How to use session:
+
+Before using you need to create table in DB:
+
+<<<<<<< HEAD
+    Flight::urlManager()->createUrl('ControllerName/action', array('param1' => 'value1', 'param2' => 'value2',));
+=======
+		CREATE TABLE IF NOT EXISTS session_data_table
+		(id CHAR(32) PRIMARY KEY NOT NULL,
+		 expire INTEGER,
+		 data TEXT)
+>>>>>>> 89a6c64faa0ebec1d19e975dc27122b379db4ba8
+
+Then use code:
+```php
+	$session = Flight::session();
+	$session['key'] = 'value';
+	$var = $session['key'];
+```
+
+Or other way to use session:
+```php
+	Flight::$session['key'] = 'value';
+	$var = Flight::$session['key'];
+```		
+		
+Public methods:
+```php
+	$session->open() - open session (open by default).
+	$session->close() - close session.
+	$session->destroy() - unset all variables and destroy session.
+	$session->toArray() - return all session variables in array.
+	$session->getID() - return session id.
+	$session->getName() - return session name.
+	$session->count() - return number of items in session.
+	$session->getKeys() - return array with session variable names.
+	$session->remove('key') - return the removed value, null if no such session variable.
+	$session->clear() - remove all session variables.
+	$session->contains('key') - return boolean.
+```
 
 # Type hinting in PHPStorm
 
 add autocomplete for DB PDOWrapper
-
+```php
     /**
     * @var flight\util\PDOWrapper $db
     */
@@ -194,7 +282,7 @@ add autocomplete for DB PDOWrapper
     {
         $this->db = Flight::db();
     }
-
+```
 
 # What is Flight?
 
