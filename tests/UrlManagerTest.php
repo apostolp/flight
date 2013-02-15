@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../flight/util/UrlManager.php';
+require_once __DIR__ . '/../flight/util/UrlManager.php';
 use flight\util\UrlManager;
 
 
@@ -33,19 +33,19 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $_SERVER['HTTP_HOST'] = 'hidemyass.dev';
-        $_SERVER['SCRIPT_NAME'] = '/index.php';
+        $_SERVER['HTTP_HOST']     = 'hidemyass.dev';
+        $_SERVER['SCRIPT_NAME']   = '/index.php';
         $_SERVER['DOCUMENT_ROOT'] = 'D:/server/hidemyass.dev';
 
         $this->compareAbsoluteUrl = "http://hidemyass.dev";
 
         $this->routes = array(
-            '/' => array('\controllers\Index', 'start'),
-            '/proxy' => array('\controllers\ProxyController', 'start'),
-            '/session/@var:[a-z]*' => array('\controllers\Test','session'),
-            '/@name/@id:[0-9]+' => array('\controllers\Test','test'),
-            '/@name:[a-z]+/@action:[a-z]+/@id:[0-9]+' => array('\controllers\Test','testing'),
-            '/@name/@action:[a-z]+' => array('\controllers\Test','create'),
+            '/'                                       => array('\controllers\Index', 'start'),
+            '/proxy'                                  => array('\controllers\ProxyController', 'start'),
+            '/session/@var:[a-z]*'                    => array('\controllers\Test', 'session'),
+            '/@name/@id:[0-9]+'                       => array('\controllers\Test', 'test'),
+            '/@name:[a-z]+/@action:[a-z]+/@id:[0-9]+' => array('\controllers\Test', 'testing'),
+            '/@name/@action:[a-z]+'                   => array('\controllers\Test', 'create'),
         );
         $this->object = new UrlManager($this->routes);
     }
@@ -63,11 +63,21 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateUrl()
     {
-        $indexUrl = $this->object->createUrl('index/start');
-        $testUrl  = $this->object->createUrl('test/test', array('name' => 'test', 'id' => 1));
+        $absoluteUrl = $this->object->getAbsoluteUrl();
 
-        $this->assertEquals($this->object->getAbsoluteUrl() . '/', $indexUrl);
-        $this->assertEquals($this->object->getAbsoluteUrl() . '/test/1', $testUrl);
+        $one   = $this->object->createUrl('index/start');
+        $two   = $this->object->createUrl('test/test', array('name' => 'test', 'id' => 1));
+        $three = $this->object->createUrl('test/testing', array('name' => 'test', 'action' => 'action', 'id' => 1));
+        $four  = $this->object->createUrl('Proxy/start');
+        $five  = $this->object->createUrl('Test/session', array('var' => 'var'));
+        $six   = $this->object->createUrl('Test/create', array('name' => 'name', 'action' => 'action'));
+
+        $this->assertEquals($absoluteUrl . '/', $one);
+        $this->assertEquals($absoluteUrl . '/test/1', $two);
+        $this->assertEquals($absoluteUrl . '/test/action/1', $three);
+        $this->assertEquals($absoluteUrl . '/proxy', $four);
+        $this->assertEquals($absoluteUrl . '/session/var', $five);
+        $this->assertEquals($absoluteUrl . '/name/action', $six);
     }
 
     /**
