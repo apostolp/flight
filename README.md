@@ -194,10 +194,7 @@ With UrlManager you can get absolute url or create url with parameters you need.
     Flight::urlManager()->getAbsoluteUrl() - Gets a string.
 
     Flight::urlManager()->createUrl($route, $params = array()) - Generates url according to specified route.
-<<<<<<< HEAD
-=======
 ```
->>>>>>> 89a6c64faa0ebec1d19e975dc27122b379db4ba8
 
 CreateUrl using example:
 ```php
@@ -232,14 +229,10 @@ Configuration parameters:
 
 Before using you need to create table in DB:
 
-<<<<<<< HEAD
-    Flight::urlManager()->createUrl('ControllerName/action', array('param1' => 'value1', 'param2' => 'value2',));
-=======
 		CREATE TABLE IF NOT EXISTS session_data_table
 		(id CHAR(32) PRIMARY KEY NOT NULL,
 		 expire INTEGER,
 		 data TEXT)
->>>>>>> 89a6c64faa0ebec1d19e975dc27122b379db4ba8
 
 Then use code:
 ```php
